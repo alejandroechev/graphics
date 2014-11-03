@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Scene Description in XML -->
+<scene>
+  
+  <!-- Background Color and Ambient Light Property -->
+  <background>
+    <color red="0.0" green="0.0" blue="0.0"/>
+    <ambientLight red="0.2" green="0.2" blue="0.2"/>
+  </background>
+
+  <!-- Cameras Description -->
+  <camera_list>
+    <camera fieldOfView="39.31" nearClip="1" farClip="2500.0">
+      <position x="278.0" y="273.0" z="-800.0"/>
+      <target x="278.0" y="273.0" z="-700.0"/>
+      <up x="0.0" y="1.0" z="0.0"/>
+    </camera>
+  </camera_list>
+
+  <!-- Light Sources Collection -->
+  <light_list>
+    <!-- Light Description, Color & Position -->
+    <light>
+      <color red="0.8" green="0.7" blue="0.6"/>
+      <position x="278.0" y="540.8" z="-279.5"/>
+      <attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
+    </light>
+  </light_list>
+
+  <!-- Material Type Collection -->
+  <material_list>
+    <!-- Material Descriptions -->
+    <material name="Blue">
+      <texture filename=""/>
+      <diffuse red="0.156" green="0.126" blue="0.507"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+    </material>
+
+    <material name="Green">
+      <texture filename=""/>
+      <diffuse red="0.156" green="0.426" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Red">
+      <texture filename=""/>
+      <diffuse red="0.639" green="0.06" blue="0.062"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Yellow">
+      <texture filename=""/>
+      <diffuse red="0.656" green="0.626" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="White">
+      <texture filename=""/>
+      <diffuse red="0.739" green="0.725" blue="0.765"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+      <!--<reflective value="0.5"/>-->
+    </material>
+
+    <material name="Mirror">
+      <texture filename=""/>
+      <diffuse red="0.739" green="0.725" blue="0.765"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+      <reflective attenuation="0.5"/>
+    </material>
+
+    <material name="Dielectric">
+      <texture filename=""/>
+      <diffuse red="0.739" green="0.725" blue="0.765"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+      <refractive index="1.05" attenuation="0.5"/>
+    </material>
+
+    <material name="Earth">
+      <diffuseTexture filename="Images/earthmap.jpg"/>
+      <diffuse red="1" green="1" blue="1"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+    </material>
+
+    <material name="Grid">
+      <diffuseTexture filename="Images/grid.jpg"/>
+      <diffuse red="0.639" green="0.6" blue="0.762"/>
+      <specular red="0" green="0" blue="0" shininess="100.0"/>
+    </material>
+  </material_list>
+
+  <!-- List of Scene Objects -->
+  <object_list>
+    <triangle name="Floor1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Grid">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Grid">
+        <position x="0.0" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="Grid">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="1.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="Floor2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Grid">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Grid">
+        <position x="549.6" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="1.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="Grid">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="1.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="Ceiling1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="White">
+        <position x="556.0" y="548.8" z="0.0"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="White">
+        <position x="556.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="White">
+        <position x="0.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="Ceiling2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="White">
+        <position x="556.0" y="548.8" z="0.0"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="White">
+        <position x="0.0" y="548.8" z="0.0"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="White">
+        <position x="0.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="-1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="BackWall1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="White">
+        <position x="549.6" y="0.0" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="White">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="White">
+        <position x="0.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="BackWall2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="White">
+        <position x="549.6" y="0.0" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="White">
+        <position x="556.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="White">
+        <position x="0.0" y="548.8" z="559.2"/>
+        <normal x="0.0" y="0.0" z="-1.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="RightWall1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Green">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Green">
+        <position x="0.0" y="0.0" z="0.0"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="Green">
+        <position x="0.0" y="548.8" z="0.0"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="RightWall2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Green">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Green">
+        <position x="0.0" y="548.8" z="559.2"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+      <vertex index="2" material="Green">
+        <position x="0.0" y="548.8" z="0.0"/>
+        <normal x="1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="LeftWall1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+      <vertex index="0" material="Red">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+      <vertex index="1" material="Red">
+        <position x="549.6" y="0.0" z="559.2"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+      <vertex index="2" material="Red">
+        <position x="556.0" y="548.8" z="559.2"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="LeftWall2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+      <vertex index="0" material="Red">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+      <vertex index="1" material="Red">
+        <position x="556.0" y="548.8" z="0.0"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+      <vertex index="2" material="Red">
+        <position x="556.0" y="548.8" z="559.2"/>
+        <normal x="-1.0" y="0.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+    </triangle>
+
+    <sphere name="Sphere1" material="Dielectric" radius="120.0">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+      <center x="250.0" y="120.0" z="0.0"/>
+    </sphere>
+
+    <sphere name="Sphere2" material="Earth" radius="100.0">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+      <center x="150.0" y="100.0" z="330.0"/>
+      <velocity x="30.0" y="0.0" z="0.0"/>
+    </sphere>
+
+  </object_list>
+
+  <!-- End of Scene -->
+</scene>

@@ -1,0 +1,44 @@
+1. Mover camara y target
+   - Objetos fijos
+   - Luces fijas
+   - Con rayos
+   
+2. Rayos
+   - Objetos fijos
+   - Luces fijas
+   - Con rayos
+   
+3. FOV
+   - Objetos fijos
+   - Luces fijas
+   - Con rayos
+
+4. Near y far clip   
+   - Objetos fijos
+   - Luces fijas
+   - Con rayos
+   
+5. Reflexion   
+   - Objetos fijos
+   - Luces fijas
+   - Con rayos
+
+Mision
+
+6. Mover todo lo de la camara   
+   - Objetos fijos
+   - Luces fijas
+   - Sin display
+
+   
+7. Mover objetos y luces   
+   - Camera fija
+   - Target fijo
+   - Sin display
+
+7. Mover todo   
+   - Camera fija
+   - Target fijo
+   - Sin rayos
+   - Sin display
+   

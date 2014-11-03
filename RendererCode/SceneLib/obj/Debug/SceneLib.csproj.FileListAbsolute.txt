@@ -1,0 +1,4 @@
+C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\bin\Debug\SceneLib.dll
+C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\bin\Debug\SceneLib.pdb
+C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\obj\Debug\SceneLib.dll
+C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\obj\Debug\SceneLib.pdb

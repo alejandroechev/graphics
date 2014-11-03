@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Scene Description in XML -->
+<scene>
+  
+  <!-- Background Color and Ambient Light Property -->
+  <background>
+    <color red="0.2" green="0.2" blue="0.2"/>
+    <ambientLight red="0.2" green="0.2" blue="0.2"/>
+  </background>
+
+  <!-- Cameras Description -->
+  <camera_list>
+    <!--<camera fieldOfView="45" nearClip="750" farClip="2500.0">
+      <position x="278.0" y="273.0" z="-750.0"/>
+      <target x="278.0" y="273.0" z="278.0"/>
+      <up x="0.0" y="1.0" z="0.0"/>
+    </camera>-->
+    <camera fieldOfView="45" nearClip="10" farClip="2500.0">
+      <position x="-650.0" y="550.0" z="-650.0"/>
+      <target x="278.0" y="273.0" z="278.0"/>
+      <up x="0.0" y="1.0" z="0.0"/>
+    </camera>
+    <camera fieldOfView="45" nearClip="1000" farClip="2500.0">
+      <position x="278.0" y="1547.8" z="279.5"/>
+      <target x="278.0" y="273.0" z="278.0"/>
+      <up x="0.0" y="0.0" z="1.0"/>
+    </camera>
+   
+  </camera_list>
+
+  <!-- Light Sources Collection -->
+  <light_list>
+    <!-- Light Description, Color & Position -->
+    <light>
+      <color red="0.8" green="0.7" blue="0.6"/>
+      <position x="278.0" y="1547.8" z="279.5"/>
+      <attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
+    </light>
+  </light_list>
+
+  <!-- Material Type Collection -->
+  <material_list>
+    <!-- Material Descriptions -->
+    <material name="Blue">
+      <texture filename=""/>
+      <diffuse red="0.156" green="0.126" blue="0.507"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+    </material>
+
+    <material name="Green">
+      <texture filename=""/>
+      <diffuse red="0.156" green="0.426" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Red">
+      <texture filename=""/>
+      <diffuse red="0.639" green="0.06" blue="0.062"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Yellow">
+      <texture filename=""/>
+      <diffuse red="0.656" green="0.626" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="White">
+      <texture filename=""/>
+      <diffuse red="0.739" green="0.725" blue="0.765"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Mirror">
+      <texture filename=""/>
+      <diffuse red="0.0" green="0.4" blue="0.0"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+      <reflective red="0.5" green="0.5" blue="0.5"/>
+    </material>
+
+    <material name="Earth">
+      <diffuseTexture filename="Images/earthmap.jpg"/>
+      <diffuse red="1" green="1" blue="1"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+      <!--<reflective red="0.5" green="0.5" blue="0.5"/>-->
+    </material>
+
+    <material name="Ice">
+      <diffuseTexture filename="Images/ice.jpg"/>
+      <diffuse red="0.639" green="0.6" blue="0.762"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+    </material>
+
+    <material name="Grid">
+      <diffuseTexture filename="Images/grid.jpg"/>
+      <diffuse red="0.639" green="0.6" blue="0.762"/>
+      <specular red="0" green="0" blue="0" shininess="100.0"/>
+    </material>
+  </material_list>
+
+  <!-- List of Scene Objects -->
+  <object_list>
+    <triangle name="Floor1">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Grid">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Grid">
+        <position x="0.0" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="Grid">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="1.0"/>
+      </vertex>
+    </triangle>
+
+    <triangle name="Floor2">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+
+
+      <vertex index="0" material="Grid">
+        <position x="552.8" y="0.0" z="0.0"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="0.0"/>
+      </vertex>
+
+
+      <vertex index="1" material="Grid">
+        <position x="549.6" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="0.0" v="1.0"/>
+      </vertex>
+
+
+      <vertex index="2" material="Grid">
+        <position x="0.0" y="0.0" z="559.2"/>
+        <normal x="0.0" y="1.0" z="0.0"/>
+        <texture u="1.0" v="1.0"/>
+      </vertex>
+    </triangle>
+
+
+    <mesh name="Teapot" material="Blue" path="Meshes/teapot.obj">
+      <scale x="70.0" y="70.0" z="70.0"/>
+      <rotation x="0.0" y="45.0" z="0.0"/>
+      <position x="278.0" y="278.0" z="278.0"/>
+    </mesh>
+
+  </object_list>
+
+  <!-- End of Scene -->
+</scene>

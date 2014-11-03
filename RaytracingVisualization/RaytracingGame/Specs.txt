@@ -1,0 +1,75 @@
+Raytracing game:
+
+TODO:
+
+- Specular
+- Clipping
+- Reflection
+- Shadows
+
++ Procedural levels
+
+Goal: 
++ create a 1d image that corresponds to the target
++ match most images of the same scene in X minutes      
+
+Player -> Camera: (Lights?)
+ 
+ Actions:
+ - Pos 
+ - Target 
+ - Near clip
+ - Far clip
+ - N pixels
+ - FOV?
+ - Aspect ratio?
+ 
+ - Raytracear
+ 
+Additional elements:
+
+ Objects:
+ - Rectangles
+   + color
+   + pos
+   + orientation
+   + size   
+ - Mirrors
+ - Lights
+ 
+Scaffolds:
+ - Camera attributes?
+ - Rays
+ - Image in real time 
+
+Progression:
+
+World 1: Raycasting
+
+Tutorials:
+ - Move camera -> get to place X
+ - Rotate camera -> get to place X, look at objects
+ - Toggle Rays -> raytrace to show current image in display, try different images 
+ - FOV -> move to make objects inside the frustrum
+ - Change Num pixels
+ - Change N -> change to make objects inside the frustrum
+ - Change F -> change to make objects inside the frustrum
+ 
+Challenges:
+ - Create 1 specific image, real time help  + rays
+ - Create 2 specific image, real time help + rays
+ - Create 1 specific image, no real time help + rays 
+ - Create 2 specific image, no real time help + rays 
+ - Create 1 specific image, no real time help + no rays 
+ - Create 2 specific image, no real time help + no rays
+ - Create images from stream
+ - Pattern matching
+ - Platform builder
+ 
+World 2: Shading
+ 
+ - Lights
+ - Lambert shading
+ - Ambient light
+ - Reflection
+ - Shadows
