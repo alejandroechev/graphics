@@ -2,3 +2,7 @@ C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\bin\Debug\SceneL
 C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\bin\Debug\SceneLib.pdb
 C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\obj\Debug\SceneLib.dll
 C:\Users\BOAMine\Documents\Cursos\Grafica\RendererCode\SceneLib\obj\Debug\SceneLib.pdb
+C:\Ale\Teaching\Grafica\Repo GitHub\RendererCode\SceneLib\bin\Debug\SceneLib.dll
+C:\Ale\Teaching\Grafica\Repo GitHub\RendererCode\SceneLib\bin\Debug\SceneLib.pdb
+C:\Ale\Teaching\Grafica\Repo GitHub\RendererCode\SceneLib\obj\Debug\SceneLib.dll
+C:\Ale\Teaching\Grafica\Repo GitHub\RendererCode\SceneLib\obj\Debug\SceneLib.pdb

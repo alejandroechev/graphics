@@ -1,0 +1,8 @@
+﻿<Window x:Class="Renderer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="512" Width="512">
+    <Grid>
+        <Image Name="Display" Width="512" Height="512"/>
+    </Grid>
+</Window>
