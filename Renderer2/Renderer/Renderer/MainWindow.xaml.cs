@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SceneLib;
 
 namespace Renderer
 {
@@ -14,6 +15,9 @@ namespace Renderer
     private int _width, _height, _rawStride;
     private byte[] _pixelData;
 
+    private Scene _scene;
+    private Raytracer _raytracer;
+
     public MainWindow()
     {
       InitializeComponent();
@@ -22,36 +26,41 @@ namespace Renderer
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-      _width = (int)Display.Width;
-      _height = (int)Display.Height;
+      RenderingParameters.Instance.Load();
+
+      _scene = new Scene(RenderingParameters.Instance.ImageWidth, RenderingParameters.Instance.ImageHeight, DependencyInjectorContainer.Instance.RenderObjectFactory, DependencyInjectorContainer.Instance.TextureSamplerFactory);
+      _scene.Load(RenderingParameters.Instance.ScenePath);
+
+      Width = _scene.Width * 1.2;
+      Height = _scene.Height * 1.2;
+      Display.Width = _scene.Width;
+      Display.Height = _scene.Height;
+
+      _width = _scene.Width;
+      _height = _scene.Height;
       _rawStride = (_width * _pixelFormat.BitsPerPixel + 7) / 8;
       _pixelData = new byte[_rawStride * _height];
 
-      UpdateDisplay();
+      _raytracer = new Raytracer(_scene, SetPixel, UpdateDisplay);
+      _raytracer.Render();
     }
 
     private void UpdateDisplay()
     {
-      Render();
       _bitmap = BitmapSource.Create(_width, _height,
                 96, 96, _pixelFormat, null, _pixelData, _rawStride);
       Display.Source = _bitmap;
     }
 
-    private void Render()
-    {
-      for (int y = 0; y < _height; y++)
-        for (int x = 0; x < _width; x++)
-          SetPixel(x, y, Colors.Blue);
-    }
+    
 
-    private void SetPixel(int x, int y, Color c)
+    private void SetPixel(int x, int y, float r, float g, float b)
     {
       int xIndex = x * 3;
-      int yIndex = y * _rawStride;
-      _pixelData[xIndex + yIndex] = c.R;
-      _pixelData[xIndex + yIndex + 1] = c.G;
-      _pixelData[xIndex + yIndex + 2] = c.B;
+      int yIndex = (_height - y - 1) * _rawStride;
+      _pixelData[xIndex + yIndex] = (byte)(r * 255);
+      _pixelData[xIndex + yIndex + 1] = (byte)(g * 255);
+      _pixelData[xIndex + yIndex + 2] = (byte)(b * 255);
     }
   }
 }
