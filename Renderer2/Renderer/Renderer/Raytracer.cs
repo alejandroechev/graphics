@@ -7,15 +7,14 @@ namespace Renderer
   public class Raytracer
   {
     private readonly Scene _scene;
-    private readonly Action<int, int, float, float, float> _setPixelCallback;
-    private readonly Action _updateDisplayCallback;
+    private readonly IDisplay _display;
+
     private Random _randomizer = new Random();
 
-    public Raytracer(Scene scene, Action<int, int, float, float, float> setPixelCallback, Action updateDisplayCallback)
+    public Raytracer(Scene scene, IDisplay display)
     {
       _scene = scene;
-      _setPixelCallback = setPixelCallback;
-      _updateDisplayCallback = updateDisplayCallback;
+      _display = display;
     }
 
     public void Render()
@@ -25,10 +24,10 @@ namespace Renderer
         for (int j = 0; j < _scene.Height; j++)
         {
           var color = GetSampleColor(i, j, 0);
-          _setPixelCallback(i, j, color.R, color.G, color.B);
+          _display.SetPixel(i, j, color.R, color.G, color.B);
         }
       }
-      _updateDisplayCallback();
+      _display.UpdateDisplay();
     }
 
     private Vector GetSampleColor(float screenX, float screenY, float time)

@@ -58,11 +58,9 @@
     <Compile Include="DependencyInjectorContainer.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="NearestNeighbourTextureSampler.cs" />
-    <Compile Include="PixelSamplerFactory.cs" />
     <Compile Include="Raytracer.cs" />
     <Compile Include="RenderObjectFactory.cs" />
     <Compile Include="SceneLibExtensions.cs" />
-    <Compile Include="SimpleSampler.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="TextureSamplerFactory.cs" />
     <Compile Include="Triangle.cs" />

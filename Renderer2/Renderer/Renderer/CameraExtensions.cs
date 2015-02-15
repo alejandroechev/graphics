@@ -11,6 +11,7 @@ namespace Renderer
     Left,
     Right
   }
+
   public static class CameraExtensions
   {
     public static Dictionary<Bounds, float> FrustumBounds(this Camera camera, int width, int height)

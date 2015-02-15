@@ -1,5 +1,4 @@
-﻿using Renderer.Base;
-using SceneLib;
+﻿using SceneLib;
 
 namespace Renderer
 {
@@ -15,8 +14,6 @@ namespace Renderer
 
     private readonly IRenderObjectFactory _renderObjectFactory;
     private readonly ITextureSamplerFactory _textureSamplerFactory;
-    private readonly IPixelSamplerFactory _pixelSamplerFactory;
-    private readonly IMeshLoader _meshLoader;
 
     public IRenderObjectFactory RenderObjectFactory
     {
@@ -28,17 +25,11 @@ namespace Renderer
       get { return _textureSamplerFactory; }
     }
 
-    public IPixelSamplerFactory PixelSamplerFactory
-    {
-      get { return _pixelSamplerFactory; }
-    }
-
     private DependencyInjectorContainer()
     {
-      _meshLoader = new ObjMeshLoader();
+      var meshLoader = new ObjMeshLoader();
       _textureSamplerFactory = new TextureSamplerFactory();
-      _renderObjectFactory = new RenderObjectFactory(_meshLoader);
-      _pixelSamplerFactory = new PixelSamplerFactory();
+      _renderObjectFactory = new RenderObjectFactory(meshLoader);
     }
   }
 }

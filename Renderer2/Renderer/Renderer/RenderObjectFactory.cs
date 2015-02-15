@@ -1,12 +1,12 @@
 ﻿using System;
 using SceneLib;
 
-namespace Renderer.Base
+namespace Renderer
 {
   public class RenderObjectFactory : IRenderObjectFactory
   {
     private readonly IMeshLoader _meshLoader;
-    private const string _sphereMeshPath = "Meshes/sphere.obj";
+    private const string SphereMeshPath = "Meshes/sphere.obj";
 
     public RenderObjectFactory(IMeshLoader meshLoader)
     {
@@ -22,7 +22,7 @@ namespace Renderer.Base
 
     public SphereBase CreateSphere()
     {
-      var mesh = CreateMesh(string.Empty, _sphereMeshPath);
+      var mesh = CreateMesh(string.Empty, SphereMeshPath);
       return new Sphere(mesh);
     }
 

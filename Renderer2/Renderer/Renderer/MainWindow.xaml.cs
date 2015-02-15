@@ -8,7 +8,7 @@ namespace Renderer
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
-  public partial class MainWindow
+  public partial class MainWindow : IDisplay
   {
     private BitmapSource _bitmap;
     private PixelFormat _pixelFormat = PixelFormats.Rgb24;
@@ -41,20 +41,20 @@ namespace Renderer
       _rawStride = (_width * _pixelFormat.BitsPerPixel + 7) / 8;
       _pixelData = new byte[_rawStride * _height];
 
-      _raytracer = new Raytracer(_scene, SetPixel, UpdateDisplay);
+      _raytracer = new Raytracer(_scene, this);
       _raytracer.Render();
     }
 
-    private void UpdateDisplay()
+    public void UpdateDisplay()
     {
       _bitmap = BitmapSource.Create(_width, _height,
                 96, 96, _pixelFormat, null, _pixelData, _rawStride);
       Display.Source = _bitmap;
     }
 
-    
 
-    private void SetPixel(int x, int y, float r, float g, float b)
+
+    public void SetPixel(int x, int y, float r, float g, float b)
     {
       int xIndex = x * 3;
       int yIndex = (_height - y - 1) * _rawStride;
@@ -62,5 +62,11 @@ namespace Renderer
       _pixelData[xIndex + yIndex + 1] = (byte)(g * 255);
       _pixelData[xIndex + yIndex + 2] = (byte)(b * 255);
     }
+  }
+
+  public interface IDisplay
+  {
+    void SetPixel(int x, int y, float r, float g, float b);
+    void UpdateDisplay();
   }
 }
