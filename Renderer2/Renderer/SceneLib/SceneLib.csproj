@@ -122,9 +122,6 @@
   <ItemGroup>
     <Compile Include="IHaveTriangles.cs" />
     <Compile Include="IMeshLoader.cs" />
-    <Compile Include="ITextureSampler.cs" />
-    <Compile Include="ITextureSamplerFactory.cs" />
-    <Compile Include="LockedSampler.cs" />
     <Compile Include="ObjMeshLoader.cs" />
     <Compile Include="Ray.cs" />
     <Compile Include="IRenderObjectFactory.cs" />

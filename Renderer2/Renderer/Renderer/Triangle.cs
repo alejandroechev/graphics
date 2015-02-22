@@ -63,11 +63,9 @@ namespace Renderer
       material.NormalTexture = Vertices[0].Material.NormalTexture;
       material.EnvironmentMap = Vertices[0].Material.EnvironmentMap;
       material.Diffuse = InterpolateProperty(v => v.Material.Diffuse, barycentricCoordinates);
-      if (material.HasDiffuseTexture && RenderingParameters.Instance.EnableTextureMapping)
-        material.Diffuse = material.Diffuse * material.SampleDiffuseTexture(interpolatedTextureCoordinates);
+    
       material.Specular = InterpolateProperty(v => v.Material.Specular, barycentricCoordinates);
-      if (material.HasSpecularTexture && RenderingParameters.Instance.EnableTextureMapping)
-        material.Specular = material.Specular * material.SampleSpecularTexture(interpolatedTextureCoordinates);
+    
       material.Shininess = InterpolateProperty(v => v.Material.Shininess, barycentricCoordinates);
       material.ReflectivityAttenuation = InterpolateProperty(v => v.Material.ReflectivityAttenuation, barycentricCoordinates);
       material.RefractiveAttenuation = InterpolateProperty(v => v.Material.RefractiveAttenuation, barycentricCoordinates);

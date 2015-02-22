@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace SceneLib
 {
@@ -8,8 +7,7 @@ namespace SceneLib
   /// </summary>
   public class Material
   {
-    private readonly ITextureSampler _sampler;
-
+    
     public string Name { get; set; }
     public Bitmap DiffuseTexture { get; set; }
     public Bitmap SpecularTexture { get; set; }
@@ -28,17 +26,15 @@ namespace SceneLib
     public float RefractiveAttenuation { get; set; }
     public float Shininess { get; set; }
 
-    public Material(ITextureSampler sampler)
+    public Material()
     {
-      if (sampler == null) throw new ArgumentNullException("sampler");
-      _sampler = sampler;
       Diffuse = new Vector();
       Specular = new Vector();
     }
 
     public Material Clone()
     {
-      var material = new Material(_sampler);
+      var material = new Material();
       material.Diffuse = Diffuse.Clone();
       material.Specular = Specular.Clone();
       material.ReflectivityAttenuation = ReflectivityAttenuation;
@@ -48,25 +44,7 @@ namespace SceneLib
       return material;
     }
 
-    public Vector SampleDiffuseTexture(Vector textureCoords)
-    {
-      return _sampler.Sample2D(DiffuseTexture, textureCoords);
-    }
-
-    public Vector SampleSpecularTexture(Vector textureCoords)
-    {
-      return _sampler.Sample2D(SpecularTexture, textureCoords);
-    }
-
-    public Vector SampleNormalTexture(Vector textureCoords)
-    {
-      return _sampler.Sample2D(NormalTexture, textureCoords);
-    }
-
-    public Vector SampleEnvironmentMap(Vector direction)
-    {
-      return _sampler.SampleCube(EnvironmentMap, direction);
-    }
+    
     
   }
 }

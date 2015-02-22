@@ -13,8 +13,7 @@ namespace SceneLib
   public class Scene
   {
     private readonly IRenderObjectFactory _renderObjectFactory;
-    private readonly ITextureSampler _sampler;
-
+  
     private readonly int _width;
     private readonly int _height;
 
@@ -74,14 +73,12 @@ namespace SceneLib
     }
 
 
-    public Scene(int width, int height, IRenderObjectFactory renderObjectFactory, ITextureSamplerFactory samplerFactory)
+    public Scene(int width, int height, IRenderObjectFactory renderObjectFactory)
     {
       if (renderObjectFactory == null) throw new ArgumentNullException("renderObjectFactory");
-      if (samplerFactory == null) throw new ArgumentNullException("samplerFactory");
       _width = width;
       _height = height;
       _renderObjectFactory = renderObjectFactory;
-      _sampler = samplerFactory.CreateTextureSampler(RenderingParameters.Instance.MultiSampleTexture);
     }
 
     public void NextCamera()
@@ -218,7 +215,7 @@ namespace SceneLib
     private void AddMaterial(XElement materialNode)
     {
       var name = materialNode.Attribute("name").Value;
-      var material = new Material(_sampler);
+      var material = new Material();
       if (materialNode.Elements("diffuseTexture").Any())
       {
         var diffuseTextureFile = materialNode.Elements("diffuseTexture").First().Attribute("filename").Value;

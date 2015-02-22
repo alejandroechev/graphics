@@ -52,10 +52,7 @@ namespace Renderer
       var clone = Material.Clone();
       var textureCoords = GetTextureCoords(point);
 
-      if (Material.HasDiffuseTexture && RenderingParameters.Instance.EnableTextureMapping)
-        clone.Diffuse = clone.Diffuse * Material.SampleDiffuseTexture(textureCoords);
-      if (Material.HasSpecularTexture && RenderingParameters.Instance.EnableTextureMapping)
-        clone.Specular = clone.Specular * Material.SampleSpecularTexture(textureCoords);
+     
 
       return clone;
     }

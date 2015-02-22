@@ -27,8 +27,9 @@ namespace Renderer
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
       RenderingParameters.Instance.Load();
-
-      _scene = new Scene(RenderingParameters.Instance.ImageWidth, RenderingParameters.Instance.ImageHeight, DependencyInjectorContainer.Instance.RenderObjectFactory, DependencyInjectorContainer.Instance.TextureSamplerFactory);
+      var meshLoader = new ObjMeshLoader();
+      var renderObjectFactory = new RenderObjectFactory(meshLoader);
+      _scene = new Scene(RenderingParameters.Instance.ImageWidth, RenderingParameters.Instance.ImageHeight, renderObjectFactory);
       _scene.Load(RenderingParameters.Instance.ScenePath);
 
       Width = _scene.Width * 1.2;
