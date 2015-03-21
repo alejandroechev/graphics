@@ -55,8 +55,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CameraExtensions.cs" />
+    <Compile Include="IDisplay.cs" />
+    <Compile Include="IRender.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="Rasterizer.cs" />
     <Compile Include="Raytracer.cs" />
+    <Compile Include="AbstractRenderer.cs" />
     <Compile Include="RenderObjectFactory.cs" />
     <Compile Include="SceneLibExtensions.cs" />
     <Compile Include="Sphere.cs" />
@@ -111,10 +115,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="config.xml">
+    <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\barco.jpg">
@@ -203,42 +207,42 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Scenes\cornellBox.xml">
+    <Content Include="Scenes\cornellBox.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxDistribution.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxDistribution.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxEffects.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxEffects.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxEnvironmentShadow.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxEnvironmentShadow.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxOrtographic.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxOrtographic.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxRefraction.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxRefraction.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\cornellBoxTeapot.xml">
+    </Content>
+    <Content Include="Scenes\cornellBoxTeapot.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\onesphere.xml">
+    </Content>
+    <Content Include="Scenes\onesphere.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\teapot.xml">
+    </Content>
+    <Content Include="Scenes\teapot.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\textures.xml">
+    </Content>
+    <Content Include="Scenes\textures.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\zFighting1.xml">
+    </Content>
+    <Content Include="Scenes\zFighting1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Scenes\zFighting2.xml">
+    </Content>
+    <Content Include="Scenes\zFighting2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SceneLib\SceneLib.csproj">

@@ -25,10 +25,10 @@ namespace Renderer
       return false;
     }
 
-    public override Vector GetNormal(Vector point, float time)
+    public override Vector GetNormal(Vector point)
     {
       if (_currentIntersectedPolygon == null) throw new ApplicationException("Missing current polygon intersected. Either Intersect method wasnt called, or it didnt found an intersection with this mesh");
-      return _currentIntersectedPolygon.GetNormal(point, time);
+      return _currentIntersectedPolygon.GetNormal(point);
     }
 
     public override Material GetMaterial(Vector point)

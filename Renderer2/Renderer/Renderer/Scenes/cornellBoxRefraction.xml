@@ -97,21 +97,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="Grid">
+      <vertex index="0" material="Mirror">
         <position x="552.8" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="Grid">
+      <vertex index="1" material="Mirror">
         <position x="0.0" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="2" material="Grid">
+      <vertex index="2" material="Mirror">
         <position x="0.0" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
@@ -124,21 +124,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="Grid">
+      <vertex index="0" material="Mirror">
         <position x="552.8" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="Grid">
+      <vertex index="1" material="Mirror">
         <position x="549.6" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="1.0"/>
       </vertex>
 
 
-      <vertex index="2" material="Grid">
+      <vertex index="2" material="Mirror">
         <position x="0.0" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
@@ -205,21 +205,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="White">
+      <vertex index="0" material="Mirror">
         <position x="549.6" y="0.0" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="White">
+      <vertex index="1" material="Mirror">
         <position x="0.0" y="0.0" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="2" material="White">
+      <vertex index="2" material="Mirror">
         <position x="0.0" y="548.8" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
@@ -232,21 +232,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="White">
+      <vertex index="0" material="Mirror">
         <position x="549.6" y="0.0" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="White">
+      <vertex index="1" material="Mirror">
         <position x="556.0" y="548.8" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="2" material="White">
+      <vertex index="2" material="Mirror">
         <position x="0.0" y="548.8" z="559.2"/>
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
@@ -361,7 +361,7 @@
       <center x="250.0" y="120.0" z="0.0"/>
     </sphere>
 
-    <sphere name="Sphere2" material="Earth" radius="100.0">
+    <sphere name="Sphere2" material="Mirror" radius="100.0">
       <scale x="1.0" y="1.0" z="1.0"/>
       <rotation x="0.0" y="0.0" z="0.0"/>
       <position x="0.0" y="0.0" z="0.0"/>

@@ -8,7 +8,7 @@
     public RenderObject IntersectedObject { get; set; }
     public float Time { get; set; }
 
-    public Ray(Vector pos, Vector dir, float time)
+    public Ray(Vector pos, Vector dir, float time=0)
     {
       Position = pos;
       Direction = dir.Normalize3();

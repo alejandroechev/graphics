@@ -46,7 +46,7 @@ namespace Renderer
       return true;
     }
 
-    public override Vector GetNormal(Vector point, float time)
+    public override Vector GetNormal(Vector point)
     {
       var barycentricCoordinates = GetBarycentricCoordinates(point);
       var interpolatedNormal = InterpolateProperty(v => v.Normal, barycentricCoordinates);

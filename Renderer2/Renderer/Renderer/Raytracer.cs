@@ -1,122 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
 using SceneLib;
 
 namespace Renderer
 {
-  public class Raytracer
+  public class Raytracer : AbstractRenderer
   {
-    private readonly Scene _scene;
-    private readonly IDisplay _display;
-
-    private Random _randomizer = new Random();
-
     public Raytracer(Scene scene, IDisplay display)
+      : base(scene, display)
     {
-      _scene = scene;
-      _display = display;
+
     }
 
-    public void Render()
+    public override void Render()
     {
       for (int i = 0; i < _scene.Width; i++)
       {
         for (int j = 0; j < _scene.Height; j++)
         {
-          var color = GetSampleColor(i, j, 0);
+          var color = GetSampleColor(i, j);
           _display.SetPixel(i, j, color.R, color.G, color.B);
         }
       }
       _display.UpdateDisplay();
     }
 
-    private Vector GetSampleColor(float screenX, float screenY, float time)
+    private Vector GetSampleColor(float screenX, float screenY)
     {
-      var eyeRay = CreateEyeRay(screenX, screenY, time);
-      return RayTrace(eyeRay, 0, time, screenX, screenY).Clamp3();
+      var eyeRay = CreateEyeRay(screenX, screenY);
+      return RayTrace(eyeRay, 0).Clamp3();
     }
 
-    private Ray CreateEyeRay(float screenX, float screenY, float time)
+    private Ray CreateEyeRay(float screenX, float screenY)
     {
       var sceneCamera = _scene.Camera;
       var pixelCoords = sceneCamera.PixelToCameraCoordinates(screenX, screenY, _scene.Width, _scene.Height);
       var coordinateBasis = sceneCamera.GetCameraCoordinatesBasis();
       var pixelWorldCoords = sceneCamera.Position + coordinateBasis[0] * (pixelCoords.X) + coordinateBasis[1] * (pixelCoords.Y) +
                              coordinateBasis[2] * (pixelCoords.Z);
-
-      var eyeRay = SampleEyeRay(time, sceneCamera, pixelWorldCoords, coordinateBasis, screenX, screenY);
-      return eyeRay;
-    }
-
-    private Ray SampleEyeRay(float time, Camera sceneCamera, Vector pixelWorldCoords, List<Vector> cameraCoordinateBasis, float screenX, float screenY)
-    {
-      var direction = pixelWorldCoords - sceneCamera.Position;
+      var direction = pixelWorldCoords - _scene.Camera.Position;
       direction = direction.Normalize3();
-      var focalPlanePosition = sceneCamera.Position + RenderingParameters.Instance.FocalDistance * direction;
-
-      var randomX = GetRandomValue(screenX, screenY);
-      var randomY = GetRandomValue(screenX, screenY);
-      var eyePosition = sceneCamera.Position + (RenderingParameters.Instance.LensSize / 2.0f) * ((float)(2 * randomX - 1)) * cameraCoordinateBasis[0] +
-                        (RenderingParameters.Instance.LensSize / 2.0f) * ((float)(2 * randomY - 1)) * cameraCoordinateBasis[1];
-
-      var eyeRay = new Ray(eyePosition, focalPlanePosition - eyePosition, time); // eye rays
+      var eyeRay = new Ray(_scene.Camera.Position, direction); // eye rays
       return eyeRay;
     }
 
-    private float GetRandomValue(float x, float y)
-    {
-      _randomizer = new Random((int)(x * _scene.Width) + (int)(_scene.Height * y));
-      return (float)_randomizer.NextDouble();
-    }
 
-    private Vector RayTrace(Ray ray, int recursion, float time, float screenX, float screenY)
+    private Vector RayTrace(Ray ray, int recursion)
     {
       IntersectObjects(ray);
       if (ray.IntersectedObject == null) return _scene.BackgroundColor;
-      return Shade(ray, recursion, time, screenX, screenY);
+      return Shade(ray, recursion);
     }
 
-    private Vector Shade(Ray ray, int recursion, float time, float screenX, float screenY)
+    private Vector Shade(Ray ray, int recursion)
     {
       var intersectedDitance = ray.IntersectionDistance;
       var intersectedObject = ray.IntersectedObject;
 
       var intersectionPoint = ray.Position + (ray.Direction * intersectedDitance);
-      var normal = intersectedObject.GetNormal(intersectionPoint, time);
+      var normal = intersectedObject.GetNormal(intersectionPoint);
       var material = intersectedObject.GetMaterial(intersectionPoint);
 
       var shadingColor = RenderingParameters.Instance.EnableAmbient ? _scene.AmbientLight * material.Diffuse : new Vector(0, 0, 0);
+      shadingColor = DirectIllumination(ray, material, normal, intersectionPoint, shadingColor);
+      shadingColor = Reflect(ray, recursion, material, normal, intersectionPoint, shadingColor);
+      shadingColor = Refract(ray, recursion, material, normal, intersectionPoint, shadingColor);
+      return shadingColor;
+    }
+
+    private Vector DirectIllumination(Ray ray, Material material, Vector normal, Vector intersectionPoint, Vector shadingColor)
+    {
       const float epsilon = 0.1f;
+
       foreach (var light in _scene.Lights)
       {
         var viewDirection = ray.Direction * -1;
         var lightDirection = (light.Position - intersectionPoint).Normalize3();
         var lightDistance = (light.Position - intersectionPoint).Magnitude3();
 
-        var shadowRay = SampleShadowRay(time, intersectionPoint, light, epsilon, screenX, screenY);
+        var shadowRay = CreateShadowRay(intersectionPoint, light, epsilon);
         if (RenderingParameters.Instance.EnableShadows)
           IntersectObjects(shadowRay); // shadow rays
 
         if (shadowRay.IntersectedObject == null || shadowRay.IntersectionDistance >= lightDistance)
           shadingColor += CalculateBlinnPhongIllumination(viewDirection, lightDirection, light.Color, normal, material);
       }
+      return shadingColor;
+    }
 
-      if (RenderingParameters.Instance.EnableReflections && material.ReflectivityAttenuation > 0 &&
-        recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
-      {
-        var reflectionDirection = GetReflectionDirection(ray, normal);
-        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
-        shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
-      }
+    private Vector Refract(Ray ray, int recursion, Material material, Vector normal, Vector intersectionPoint,
+      Vector shadingColor)
+    {
       if (RenderingParameters.Instance.EnableRefractions && material.RefractiveIndex > 0 &&
           recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
+        const float epsilon = 0.1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
-        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
+        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
 
         var dDotN = Vector.Dot3(ray.Direction, normal);
         var nt = material.RefractiveIndex;
-        var refractionDirection = new Vector();
+        Vector refractionDirection;
         var cosine = 0.0f;
         if (dDotN < 0)
         {
@@ -133,16 +116,30 @@ namespace Renderer
         }
         if (refractionDirection == null)
         {
-          shadingColor += material.RefractiveAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
+          shadingColor += material.RefractiveAttenuation * RayTrace(reflectedRay, recursion + 1);
         }
         else
         {
           var r0 = ((nt - 1) * (nt - 1)) / ((nt + 1) * (nt + 1));
           var r = r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5);
-          var refractedRay = new Ray(intersectionPoint + refractionDirection * epsilon, refractionDirection, time);
-          shadingColor += material.RefractiveAttenuation * (r * RayTrace(reflectedRay, recursion + 1, time, screenX, screenY) + (1 - r) * RayTrace(refractedRay, ++recursion, time, screenX, screenY));
+          var refractedRay = new Ray(intersectionPoint + refractionDirection * epsilon, refractionDirection);
+          shadingColor += material.RefractiveAttenuation *
+                          (r * RayTrace(reflectedRay, recursion + 1) + (1 - r) * RayTrace(refractedRay, recursion + 1));
         }
+      }
+      return shadingColor;
+    }
 
+    private Vector Reflect(Ray ray, int recursion, Material material, Vector normal, Vector intersectionPoint,
+      Vector shadingColor)
+    {
+      if (RenderingParameters.Instance.EnableReflections && material.ReflectivityAttenuation > 0 &&
+          recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
+      {
+        const float epsilon = 0.1f;
+        var reflectionDirection = GetReflectionDirection(ray, normal);
+        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
+        shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, recursion + 1);
       }
       return shadingColor;
     }
@@ -164,14 +161,10 @@ namespace Renderer
       return d.Normalize3();
     }
 
-    private Ray SampleShadowRay(float time, Vector intersectionPoint, Light light, float epsilon, float screenX, float screenY)
+    private Ray CreateShadowRay(Vector intersectionPoint, Light light, float epsilon)
     {
-      var randomX = GetRandomValue(screenX, screenY);
-      var randomY = GetRandomValue(screenX, screenY);
-      var randomLightPosition = light.Position + light.Width * (2 * randomX - 1) +
-                        light.Height * (2 * randomY - 1);
-      var lightDirection = (randomLightPosition - intersectionPoint).Normalize3();
-      var shadowRay = new Ray(intersectionPoint + lightDirection * epsilon, lightDirection, time);
+      var lightDirection = (light.Position - intersectionPoint).Normalize3();
+      var shadowRay = new Ray(intersectionPoint + lightDirection * epsilon, lightDirection);
       return shadowRay;
     }
 
@@ -183,15 +176,6 @@ namespace Renderer
       }
     }
 
-    protected Vector CalculateBlinnPhongIllumination(Vector viewDirection, Vector lightDirection, Vector lightColor, Vector normal, Material material)
-    {
-      var halfDirection = (viewDirection + lightDirection).Normalize3();
-      var specular = RenderingParameters.Instance.EnableSpecular
-        ? material.Specular * lightColor *
-          (float)Math.Pow(Math.Max(0, Vector.Dot3(normal, halfDirection)), material.Shininess)
-        : new Vector(0, 0, 0);
-      var diffuse = material.Diffuse * lightColor * Math.Max(0, Vector.Dot3(normal, lightDirection));
-      return diffuse + specular;
-    }
+
   }
 }

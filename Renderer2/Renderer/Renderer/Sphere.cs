@@ -41,9 +41,9 @@ namespace Renderer
       return false;
     }
 
-    public override Vector GetNormal(Vector point, float time)
+    public override Vector GetNormal(Vector point)
     {
-      var currentPosition = GetPosition(time);
+      var currentPosition = GetPosition();
       return (point - currentPosition).Normalize3();
     }
 
@@ -52,12 +52,10 @@ namespace Renderer
       var clone = Material.Clone();
       var textureCoords = GetTextureCoords(point);
 
-     
-
       return clone;
     }
 
-    private Vector GetPosition(float deltaTime)
+    private Vector GetPosition(float deltaTime=0)
     {
       return Center + deltaTime * Velocity;
     }

@@ -20,7 +20,7 @@
     }
 
     public abstract bool Intersect(Ray ray);
-    public abstract Vector GetNormal(Vector point, float time);
+    public abstract Vector GetNormal(Vector point);
     public abstract Material GetMaterial(Vector point);
 
     public virtual void Update(float deltaTime)
