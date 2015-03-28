@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SceneLib;
@@ -24,6 +25,23 @@ namespace Renderer
     {
       InitializeComponent();
       Loaded += OnLoaded;
+      KeyDown += OnKeyDown;
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+      const float deltaCamera = 50;
+      if (e.Key == Key.R)
+        _currentRendererIndex = (_currentRendererIndex + 1) % _renderers.Count;
+      if(e.Key == Key.W)
+        _scene.Camera.MoveForward(deltaCamera);
+      if (e.Key == Key.S)
+        _scene.Camera.MoveForward(-deltaCamera);
+      if (e.Key == Key.A)
+        _scene.Camera.MoveSideways(-deltaCamera);
+      if (e.Key == Key.D)
+        _scene.Camera.MoveSideways(deltaCamera);
+      UpdateRenderer();
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -45,9 +63,13 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Raytracer(_scene, this));
-      RendererName.Text = _renderers[_currentRendererIndex].Name; 
+      UpdateRenderer();
+    }
+
+    private void UpdateRenderer()
+    {
+      RendererName.Text = _renderers[_currentRendererIndex].Name;
       _renderers[_currentRendererIndex].Render();
-      
     }
 
     public void UpdateDisplay()
@@ -56,7 +78,7 @@ namespace Renderer
                 96, 96, _pixelFormat, null, _pixelData, _rawStride);
       Display.Source = _bitmap;
     }
-    
+
 
     public void SetPixel(int x, int y, float r, float g, float b)
     {

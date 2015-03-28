@@ -18,7 +18,7 @@ namespace Renderer.Base
     private readonly Scene _scene;
     public MainWindow(int width, int height)
       : base(width, height,
-        new OpenTK.Graphics.GraphicsMode(), "1. CPU Raytracer", GameWindowFlags.Default,
+        new OpenTK.Graphics.GraphicsMode(), "4. GPU Rasterizer", GameWindowFlags.Default,
         DisplayDevice.Default, 3, 0,
         OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible | OpenTK.Graphics.GraphicsContextFlags.Debug)
     {

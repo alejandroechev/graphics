@@ -23,8 +23,7 @@
     <!-- Light Description, Color & Position -->
     <light>
       <color red="0.8" green="0.7" blue="0.6"/>
-      <position x="0.0" y="0.5" z="10.0"/>
-      <attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
+      <position x="0.0" y="4.5" z="10.0"/>
     </light>
   </light_list>
 

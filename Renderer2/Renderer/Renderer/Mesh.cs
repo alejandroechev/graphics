@@ -14,15 +14,19 @@ namespace Renderer
 
     public override bool Intersect(Ray ray)
     {
+      float tMin = float.MaxValue;
       foreach (var polygon in Triangles)
       {
         if (polygon.Intersect(ray))
         {
-          _currentIntersectedPolygon = polygon;
-          return true;
+          if (ray.IntersectionDistance < tMin)
+          {
+            tMin = ray.IntersectionDistance;
+            _currentIntersectedPolygon = polygon;
+          }
         }
       }
-      return false;
+      return tMin < float.MaxValue;
     }
 
     public override Vector GetNormal(Vector point)
