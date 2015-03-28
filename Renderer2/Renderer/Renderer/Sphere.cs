@@ -5,15 +5,16 @@ namespace Renderer
 {
   public class Sphere : SphereBase
   {
-    public Sphere(MeshBase sphereMesh) : base(sphereMesh)
+    public Sphere(MeshBase sphereMesh)
+      : base(sphereMesh)
     {
     }
 
     public override bool Intersect(Ray ray)
     {
       var a = Vector.Dot3(ray.Direction, ray.Direction);
-      var b = 2 * Vector.Dot3((ray.Position - GetPosition(ray.Time)), ray.Direction);
-      var c = Vector.Dot3((ray.Position - GetPosition(ray.Time)), (ray.Position - GetPosition(ray.Time))) - (Radius * Radius);
+      var b = 2 * Vector.Dot3((ray.Position - Center), ray.Direction);
+      var c = Vector.Dot3((ray.Position - Center), (ray.Position - Center)) - (Radius * Radius);
 
       var discr = b * b - 4 * a * c;
       if (discr < 0)
@@ -43,22 +44,23 @@ namespace Renderer
 
     public override Vector GetNormal(Vector point)
     {
-      var currentPosition = GetPosition();
+      var currentPosition = Center;
       return (point - currentPosition).Normalize3();
     }
 
     public override Material GetMaterial(Vector point)
     {
-      var clone = Material.Clone();
-      var textureCoords = GetTextureCoords(point);
-
-      return clone;
+      var material = Material.Clone();
+      if (material.HasDiffuseTexture)
+      {
+        var textureCoords = GetTextureCoords(point);
+        material.Diffuse = material.Diffuse*
+                        material.GetDiffuseTexturePixel((int)(textureCoords.X * material.GetDiffuseTextureWidth() - 1),
+                          (int) (textureCoords.Y*material.GetDiffuseTextureHeight() - 1));
+      }
+      return material;
     }
 
-    private Vector GetPosition(float deltaTime=0)
-    {
-      return Center + deltaTime * Velocity;
-    }
 
     private Vector GetTextureCoords(Vector point)
     {
@@ -67,6 +69,16 @@ namespace Renderer
 
       var u = (float)((phi < 0 ? phi + 2 * Math.PI : phi) / (2 * Math.PI));
       var v = 1 - (float)((Math.PI - theta) / Math.PI);
+
+      if (u < 0)
+        u = 0;
+      if (u > 1)
+        u = 1;
+      if (v < 0)
+        v = 0;
+      if (v > 1)
+        v = 1;
+
 
       var textureCoords = new Vector(u, v);
       return textureCoords;

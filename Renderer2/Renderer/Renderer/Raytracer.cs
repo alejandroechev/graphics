@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Linq;
 using SceneLib;
 
 namespace Renderer
 {
   public class Raytracer : AbstractRenderer
   {
+    public override string Name
+    {
+      get { return "Raytracer"; }
+    }
+
     public Raytracer(Scene scene, IDisplay display)
       : base(scene, display)
     {
@@ -13,14 +19,13 @@ namespace Renderer
 
     public override void Render()
     {
-      for (int i = 0; i < _scene.Width; i++)
+      Enumerable.Range(0, _scene.Width * _scene.Height).ToList().AsParallel().ForAll(pixel =>
       {
-        for (int j = 0; j < _scene.Height; j++)
-        {
-          var color = GetSampleColor(i, j);
-          _display.SetPixel(i, j, color.R, color.G, color.B);
-        }
-      }
+        var i = pixel % _scene.Width;
+        var j = pixel / _scene.Width;
+        var color = GetSampleColor(i, j);
+        _display.SetPixel(i, j, color.R, color.G, color.B);
+      });
       _display.UpdateDisplay();
     }
 
@@ -60,7 +65,7 @@ namespace Renderer
       var normal = intersectedObject.GetNormal(intersectionPoint);
       var material = intersectedObject.GetMaterial(intersectionPoint);
 
-      var shadingColor = RenderingParameters.Instance.EnableAmbient ? _scene.AmbientLight * material.Diffuse : new Vector(0, 0, 0);
+      var shadingColor = _scene.AmbientLight * material.Diffuse;
       shadingColor = DirectIllumination(ray, material, normal, intersectionPoint, shadingColor);
       shadingColor = Reflect(ray, recursion, material, normal, intersectionPoint, shadingColor);
       shadingColor = Refract(ray, recursion, material, normal, intersectionPoint, shadingColor);
@@ -78,8 +83,7 @@ namespace Renderer
         var lightDistance = (light.Position - intersectionPoint).Magnitude3();
 
         var shadowRay = CreateShadowRay(intersectionPoint, light, epsilon);
-        if (RenderingParameters.Instance.EnableShadows)
-          IntersectObjects(shadowRay); // shadow rays
+        IntersectObjects(shadowRay);
 
         if (shadowRay.IntersectedObject == null || shadowRay.IntersectionDistance >= lightDistance)
           shadingColor += CalculateBlinnPhongIllumination(viewDirection, lightDirection, light.Color, normal, material);
@@ -90,8 +94,7 @@ namespace Renderer
     private Vector Refract(Ray ray, int recursion, Material material, Vector normal, Vector intersectionPoint,
       Vector shadingColor)
     {
-      if (RenderingParameters.Instance.EnableRefractions && material.RefractiveIndex > 0 &&
-          recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
+      if (material.RefractiveIndex > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
         const float epsilon = 0.1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
@@ -133,8 +136,7 @@ namespace Renderer
     private Vector Reflect(Ray ray, int recursion, Material material, Vector normal, Vector intersectionPoint,
       Vector shadingColor)
     {
-      if (RenderingParameters.Instance.EnableReflections && material.ReflectivityAttenuation > 0 &&
-          recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
+      if (material.ReflectivityAttenuation > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
         const float epsilon = 0.1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);

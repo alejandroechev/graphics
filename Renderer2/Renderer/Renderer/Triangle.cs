@@ -56,20 +56,22 @@ namespace Renderer
     public override Material GetMaterial(Vector point)
     {
       var barycentricCoordinates = GetBarycentricCoordinates(point);
-      var interpolatedTextureCoordinates = InterpolateProperty(v => v.TextureCoordinates, barycentricCoordinates);
       var material = Vertices[0].Material.Clone();
-      material.DiffuseTexture = Vertices[0].Material.DiffuseTexture;
-      material.SpecularTexture = Vertices[0].Material.SpecularTexture;
-      material.NormalTexture = Vertices[0].Material.NormalTexture;
-      material.EnvironmentMap = Vertices[0].Material.EnvironmentMap;
       material.Diffuse = InterpolateProperty(v => v.Material.Diffuse, barycentricCoordinates);
-    
       material.Specular = InterpolateProperty(v => v.Material.Specular, barycentricCoordinates);
-    
+
       material.Shininess = InterpolateProperty(v => v.Material.Shininess, barycentricCoordinates);
       material.ReflectivityAttenuation = InterpolateProperty(v => v.Material.ReflectivityAttenuation, barycentricCoordinates);
       material.RefractiveAttenuation = InterpolateProperty(v => v.Material.RefractiveAttenuation, barycentricCoordinates);
       material.RefractiveIndex = InterpolateProperty(v => v.Material.RefractiveIndex, barycentricCoordinates);
+      
+      if (material.HasDiffuseTexture)
+      {
+        var textureCoords = InterpolateProperty(v => v.TextureCoordinates, barycentricCoordinates);
+        material.Diffuse = material.Diffuse *
+                       material.GetDiffuseTexturePixel((int)(textureCoords.X * material.GetDiffuseTextureWidth() - 1),
+                         (int)(textureCoords.Y * material.GetDiffuseTextureHeight() - 1));
+      }
       return material;
     }
 

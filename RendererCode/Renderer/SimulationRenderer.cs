@@ -29,12 +29,12 @@ namespace Renderer
 
     public override void OnKeyPress(KeyPressEventArgs e)
     {
-      
+
     }
 
     public override void Render()
     {
-  
+
       if (RenderingParameters.Instance.EnableParallelism)
         _pixelSampler.Samples.ToList().AsParallel().ForAll(s => s.Color = GetSampleColor(s.X, s.Y, s.Time));
       else
@@ -63,14 +63,14 @@ namespace Renderer
           {
             foreach (var vertex in polygon.Vertices)
             {
-              vertex.SimPosition = modelToWorld*vertex.Position;
+              vertex.SimPosition = modelToWorld * vertex.Position;
               //vertex.Normal = inverseTranspose*vertex.Normal;
             }
           }
         }
       }
     }
-  
+
     private Vector GetSampleColor(float screenX, float screenY, float time)
     {
       var eyeRay = CreateEyeRay(screenX, screenY, time);
@@ -127,64 +127,74 @@ namespace Renderer
       var material = intersectedObject.GetMaterial(intersectionPoint);
 
       var shadingColor = RenderingParameters.Instance.EnableAmbient ? _scene.AmbientLight * material.Diffuse : new Vector(0, 0, 0);
-      const float epsilon = 0.1f;
-      foreach (var light in _scene.Lights)
+      if (RenderingParameters.Instance.EnableShading)
       {
-        var viewDirection = ray.Direction * -1;
-        var lightDirection = (light.Position - intersectionPoint).Normalize3();
-        var lightDistance = (light.Position - intersectionPoint).Magnitude3();
-
-        var shadowRay = SampleShadowRay(time, intersectionPoint, light, epsilon, screenX, screenY);
-        if (RenderingParameters.Instance.EnableShadows)
-          IntersectObjects(shadowRay); // shadow rays
-
-        if (shadowRay.IntersectedObject == null || shadowRay.IntersectionDistance >= lightDistance)
-          shadingColor += CalculateBlinnPhongIllumination(viewDirection, lightDirection, light.Color, normal, material);
-      }
-
-      if (RenderingParameters.Instance.EnableReflections && material.ReflectivityAttenuation > 0 &&
-        recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
-      {
-        var reflectionDirection = GetReflectionDirection(ray, normal);
-        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
-        shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
-      }
-      if (RenderingParameters.Instance.EnableRefractions && material.RefractiveIndex > 0 &&
-          recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
-      {
-        var reflectionDirection = GetReflectionDirection(ray, normal);
-        var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
-
-        var dDotN = Vector.Dot3(ray.Direction, normal);
-        var nt = material.RefractiveIndex;
-        var refractionDirection = new Vector();
-        var cosine = 0.0f;
-        if (dDotN < 0)
+        const float epsilon = 0.1f;
+        foreach (var light in _scene.Lights)
         {
-          refractionDirection = GerRefractionDirection(ray, normal, nt);
-          cosine = -dDotN;
-        }
-        else
-        {
-          refractionDirection = GerRefractionDirection(ray, -1.0f*normal, 1.0f / nt);
-          if (refractionDirection != null)
+          var viewDirection = ray.Direction * -1;
+          var lightDirection = (light.Position - intersectionPoint).Normalize3();
+          var lightDistance = (light.Position - intersectionPoint).Magnitude3();
+
+          var shadowRay = SampleShadowRay(time, intersectionPoint, light, epsilon, screenX, screenY);
+          if (RenderingParameters.Instance.EnableShadows)
+            IntersectObjects(shadowRay); // shadow rays
+
+          if ((shadowRay.IntersectedObject == null || shadowRay.IntersectionDistance >= lightDistance))
           {
-            cosine = Vector.Dot3(refractionDirection, normal);
+            shadingColor += CalculateBlinnPhongIllumination(viewDirection, lightDirection, light.Color, normal, material);
+          }
+
+          if (RenderingParameters.Instance.EnableReflections && material.ReflectivityAttenuation > 0 &&
+            recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
+          {
+            var reflectionDirection = GetReflectionDirection(ray, normal);
+            var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
+            shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
+          }
+          if (RenderingParameters.Instance.EnableRefractions && material.RefractiveIndex > 0 &&
+              recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
+          {
+            var reflectionDirection = GetReflectionDirection(ray, normal);
+            var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection, time);
+
+            var dDotN = Vector.Dot3(ray.Direction, normal);
+            var nt = material.RefractiveIndex;
+            var refractionDirection = new Vector();
+            var cosine = 0.0f;
+            if (dDotN < 0)
+            {
+              refractionDirection = GerRefractionDirection(ray, normal, nt);
+              cosine = -dDotN;
+            }
+            else
+            {
+              refractionDirection = GerRefractionDirection(ray, -1.0f * normal, 1.0f / nt);
+              if (refractionDirection != null)
+              {
+                cosine = Vector.Dot3(refractionDirection, normal);
+              }
+            }
+            if (refractionDirection == null)
+            {
+              shadingColor += material.RefractiveAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
+            }
+            else
+            {
+              var r0 = ((nt - 1) * (nt - 1)) / ((nt + 1) * (nt + 1));
+              var r = r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5);
+              var refractedRay = new Ray(intersectionPoint + refractionDirection * epsilon, refractionDirection, time);
+              shadingColor += material.RefractiveAttenuation * (r * RayTrace(reflectedRay, recursion + 1, time, screenX, screenY) + (1 - r) * RayTrace(refractedRay, ++recursion, time, screenX, screenY));
+            }
+
           }
         }
-        if (refractionDirection == null)
-        {
-          shadingColor += material.RefractiveAttenuation * RayTrace(reflectedRay, ++recursion, time, screenX, screenY);
-        }
-        else
-        {
-          var r0 = ((nt - 1) * (nt - 1)) / ((nt + 1) * (nt + 1));
-          var r = r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5);
-          var refractedRay = new Ray(intersectionPoint + refractionDirection * epsilon, refractionDirection, time);
-          shadingColor += material.RefractiveAttenuation * (r * RayTrace(reflectedRay, recursion + 1, time, screenX, screenY) + (1 - r) * RayTrace(refractedRay, ++recursion, time, screenX, screenY));
-        }
-
       }
+      else
+      {
+        shadingColor = material.Diffuse;
+      }
+
       return shadingColor;
     }
 
@@ -224,6 +234,6 @@ namespace Renderer
       }
     }
 
-    
+
   }
 }

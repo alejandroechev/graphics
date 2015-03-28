@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace SceneLib
 {
@@ -7,18 +8,16 @@ namespace SceneLib
   /// </summary>
   public class Material
   {
-    
+    private static readonly object _myLock = new object();
+
     public string Name { get; set; }
-    public Bitmap DiffuseTexture { get; set; }
-    public Bitmap SpecularTexture { get; set; }
-    public Bitmap NormalTexture { get; set; }
-    public Bitmap DisplacementMap { get; set; }
-    public Bitmap EnvironmentMap { get; set; }
-    public bool HasDiffuseTexture { get { return DiffuseTexture != null; }}
-    public bool HasSpecularTexture { get { return SpecularTexture != null; } }
-    public bool HasNormalTexture { get { return NormalTexture != null; } }
-    public bool HasDisplacementMap { get { return DisplacementMap != null; } }
-    public bool HasEnvironmentMap { get { return EnvironmentMap != null; } }
+    internal Bitmap DiffuseTexture { get; set; }
+
+    public bool HasDiffuseTexture
+    {
+      get { return DiffuseTexture != null; }
+    }
+
     public Vector Diffuse { get; set; }
     public Vector Specular { get; set; }
     public float ReflectivityAttenuation { get; set; }
@@ -35,6 +34,7 @@ namespace SceneLib
     public Material Clone()
     {
       var material = new Material();
+      material.DiffuseTexture = DiffuseTexture;
       material.Diffuse = Diffuse.Clone();
       material.Specular = Specular.Clone();
       material.ReflectivityAttenuation = ReflectivityAttenuation;
@@ -44,7 +44,39 @@ namespace SceneLib
       return material;
     }
 
-    
-    
+    public int GetDiffuseTextureWidth()
+    {
+      lock (_myLock)
+      {
+        if (!HasDiffuseTexture)
+          return 0;
+        return DiffuseTexture.Width;
+      }
+    }
+
+    public int GetDiffuseTextureHeight()
+    {
+      lock (_myLock)
+      {
+        if (!HasDiffuseTexture)
+          return 0;
+        return DiffuseTexture.Height;
+      }
+    }
+
+    public Vector GetDiffuseTexturePixel(int i, int j)
+    {
+      lock (_myLock)
+      {
+        if (!HasDiffuseTexture)
+          return new Vector(1, 1, 1);
+        if (i < 0 || i >= DiffuseTexture.Width || j < 0 || j >= DiffuseTexture.Height)
+          throw new ArgumentException("Pixel has to be inside texture");
+        var pixel = DiffuseTexture.GetPixel(i, j);
+        return new Vector(pixel.R / 255.0f, pixel.G / 255.0f, pixel.B / 255.0f);
+      }
+
+    }
+
   }
 }

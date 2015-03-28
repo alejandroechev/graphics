@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using SceneLib;
 
 namespace Renderer
 {
   public class Rasterizer : AbstractRenderer
   {
+    public override string Name
+    {
+      get { return "Rasterizer"; }
+    }
+
     public Rasterizer(Scene scene, IDisplay display)
       : base(scene, display)
     {

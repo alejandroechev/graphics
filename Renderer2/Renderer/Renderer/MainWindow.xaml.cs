@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SceneLib;
@@ -16,7 +17,8 @@ namespace Renderer
     private byte[] _pixelData;
 
     private Scene _scene;
-    private Raytracer _raytracer;
+    private readonly List<IRender> _renderers = new List<IRender>();
+    private int _currentRendererIndex = 0;
 
     public MainWindow()
     {
@@ -42,8 +44,10 @@ namespace Renderer
       _rawStride = (_width * _pixelFormat.BitsPerPixel + 7) / 8;
       _pixelData = new byte[_rawStride * _height];
 
-      _raytracer = new Raytracer(_scene, this);
-      _raytracer.Render();
+      _renderers.Add(new Raytracer(_scene, this));
+      RendererName.Text = _renderers[_currentRendererIndex].Name; 
+      _renderers[_currentRendererIndex].Render();
+      
     }
 
     public void UpdateDisplay()
@@ -52,8 +56,7 @@ namespace Renderer
                 96, 96, _pixelFormat, null, _pixelData, _rawStride);
       Display.Source = _bitmap;
     }
-
-
+    
 
     public void SetPixel(int x, int y, float r, float g, float b)
     {

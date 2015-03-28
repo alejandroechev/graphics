@@ -35,7 +35,8 @@ namespace SceneLib
     public float MaximumTime { get; set; }
     public float FocalDistance { get; set; }
     public float LensSize { get; set; }
-    
+    public bool EnableShading { get; set; }
+
     private RenderingParameters()
     {
       ScenePath = "Scenes/cornellBox.xml";
@@ -43,10 +44,9 @@ namespace SceneLib
       ImageHeight = 256;
       FrameRate = 30;
       SamplesPerPixel = 1;
-      EnableParallelism = false;
+      EnableParallelism = true;
       MultiSampleTexture = false;
-      EnableSpecular = true;
-      EnableAmbient = true;
+
       EnableShadows = true;
       EnableReflections = true;
       EnableRefractions = true;
@@ -56,6 +56,9 @@ namespace SceneLib
       MaximumTime = 0;
       FocalDistance = 0;
       LensSize = 0;
+      EnableShading = true;
+      EnableSpecular = true;
+      EnableAmbient = true;
     }
 
     public void Load()

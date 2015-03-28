@@ -222,30 +222,6 @@ namespace SceneLib
         if (string.IsNullOrEmpty(diffuseTextureFile) || !File.Exists(diffuseTextureFile)) throw new ApplicationException("diffuse texture of material " + name + " is invalid");
         material.DiffuseTexture = (Bitmap)Image.FromFile(diffuseTextureFile);
       }
-      if (materialNode.Elements("specularTexture").Any())
-      {
-        var specularTextureFile = materialNode.Elements("specularTexture").First().Attribute("filename").Value;
-        if (string.IsNullOrEmpty(specularTextureFile) || !File.Exists(specularTextureFile)) throw new ApplicationException("specular texture of material " + name + " is invalid");
-        material.SpecularTexture = (Bitmap)Image.FromFile(specularTextureFile);
-      }
-      if (materialNode.Elements("normalTexture").Any())
-      {
-        var normalTextureFile = materialNode.Elements("normalTexture").First().Attribute("filename").Value;
-        if (string.IsNullOrEmpty(normalTextureFile) || !File.Exists(normalTextureFile)) throw new ApplicationException("normal texture of material " + name + " is invalid");
-        material.NormalTexture = (Bitmap)Image.FromFile(normalTextureFile);
-      }
-      if (materialNode.Elements("displacementMap").Any())
-      {
-        var displacementMapFile = materialNode.Elements("displacementMap").First().Attribute("filename").Value;
-        if (string.IsNullOrEmpty(displacementMapFile) || !File.Exists(displacementMapFile)) throw new ApplicationException("displacement map of material " + name + " is invalid");
-        material.DisplacementMap = (Bitmap)Image.FromFile(displacementMapFile);
-      }
-      if (materialNode.Elements("environmentMap").Any())
-      {
-        var environmentMapFile = materialNode.Elements("environmentMap").First().Attribute("filename").Value;
-        if (string.IsNullOrEmpty(environmentMapFile) || !File.Exists(environmentMapFile)) throw new ApplicationException("environment map of material " + name + " is invalid");
-        material.EnvironmentMap = (Bitmap)Image.FromFile(environmentMapFile);
-      }
       if (materialNode.Elements("specular").Any())
       {
         material.Specular = XMLHelper.LoadSpecular(materialNode.Elements("specular").First());
@@ -268,20 +244,6 @@ namespace SceneLib
       var lightObj = new Light();
       lightObj.Position = XMLHelper.LoadXYZ(lightNode.Elements("position").First());
       lightObj.Color = XMLHelper.LoadColor(lightNode.Elements("color").First());
-      var attenuationNode = lightNode.Elements("attenuation").FirstOrDefault();
-      if (attenuationNode != null)
-      {
-        lightObj.AtenuationConstant = XMLHelper.LoadFloat(attenuationNode, "constant");
-        lightObj.AtenuationLinear = XMLHelper.LoadFloat(attenuationNode, "linear");
-        lightObj.AtenuationQuadratic = XMLHelper.LoadFloat(attenuationNode, "quadratic");
-      }
-      var widthNode = lightNode.Elements("width").FirstOrDefault();
-      if (widthNode != null)
-        lightObj.Width = XMLHelper.LoadXYZ(widthNode);
-      var heightNode = lightNode.Elements("height").FirstOrDefault();
-      if (heightNode != null)
-        lightObj.Height = XMLHelper.LoadXYZ(heightNode);
-
       _lights.Add(lightObj);
     }
 
