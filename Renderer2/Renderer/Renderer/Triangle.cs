@@ -69,8 +69,8 @@ namespace Renderer
       {
         var textureCoords = InterpolateProperty(v => v.TextureCoordinates, barycentricCoordinates);
         material.Diffuse = material.Diffuse *
-                       material.GetDiffuseTexturePixel((int)(textureCoords.X * material.GetDiffuseTextureWidth() - 1),
-                         (int)(textureCoords.Y * material.GetDiffuseTextureHeight() - 1));
+                       material.GetDiffuseTexturePixel((int)(textureCoords.X * (material.GetDiffuseTextureWidth() - 1)),
+                         (int)(textureCoords.Y * (material.GetDiffuseTextureHeight() - 1)));
       }
       return material;
     }
