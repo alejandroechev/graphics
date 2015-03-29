@@ -207,6 +207,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scenes\cornellBox - multilight.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scenes\cornellBox.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
