@@ -96,15 +96,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Meshes\cube.obj">
+    <Content Include="Meshes\cube.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Meshes\sphere.obj">
+    </Content>
+    <Content Include="Meshes\sphere.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Meshes\teapot.obj">
+    </Content>
+    <Content Include="Meshes\teapot.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -121,90 +121,90 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\barco.jpg">
+    <Content Include="Images\barco.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\bricks.jpg">
+    </Content>
+    <Content Include="Images\bricks.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\bump4.jpg">
+    </Content>
+    <Content Include="Images\bump4.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\chess.png">
+    </Content>
+    <Content Include="Images\chess.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\cornellMap.png">
+    </Content>
+    <Content Include="Images\cornellMap.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\cornellMap2.png">
+    </Content>
+    <Content Include="Images\cornellMap2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\earthlights1.jpg">
+    </Content>
+    <Content Include="Images\earthlights1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\earthmap.jpg">
+    </Content>
+    <Content Include="Images\earthmap.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\environment1.jpg">
+    </Content>
+    <Content Include="Images\environment1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\environment2.jpg">
+    </Content>
+    <Content Include="Images\environment2.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\fire.jpg">
+    </Content>
+    <Content Include="Images\fire.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\grid.jpg">
+    </Content>
+    <Content Include="Images\grid.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\ice.jpg">
+    </Content>
+    <Content Include="Images\ice.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\ice_NRM.jpg">
+    </Content>
+    <Content Include="Images\ice_NRM.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\normal.jpg">
+    </Content>
+    <Content Include="Images\normal.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\normal2.jpg">
+    </Content>
+    <Content Include="Images\normal2.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\normal3.jpg">
+    </Content>
+    <Content Include="Images\normal3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\normal4.jpg">
+    </Content>
+    <Content Include="Images\normal4.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\pitcher.JPG">
+    </Content>
+    <Content Include="Images\pitcher.JPG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\rustbin.jpg">
+    </Content>
+    <Content Include="Images\rustbin.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\smoke.jpg">
+    </Content>
+    <Content Include="Images\smoke.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\starmap.png">
+    </Content>
+    <Content Include="Images\starmap.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stones.jpg">
+    </Content>
+    <Content Include="Images\stones.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stones2.jpg">
+    </Content>
+    <Content Include="Images\stones2.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stones2.png">
+    </Content>
+    <Content Include="Images\stones2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stonesNormalMap.jpg">
+    </Content>
+    <Content Include="Images\stonesNormalMap.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stonesNormalMap2.jpg">
+    </Content>
+    <Content Include="Images\stonesNormalMap2.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stonesNormalMap2.png">
+    </Content>
+    <Content Include="Images\stonesNormalMap2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scenes\cornellBox - multilight.xml">

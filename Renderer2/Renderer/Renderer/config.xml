@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
   <window width="512" height="512"/>
-  <scene path ="Scenes/cornellBox - multilight.xml"/>
+  <scene path ="Scenes/cornellBoxEffects.xml"/>
 
 </config>

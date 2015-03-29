@@ -24,7 +24,6 @@
     <light>
       <color red="0.8" green="0.7" blue="0.6"/>
       <position x="278.0" y="540.8" z="-279.5"/>
-      <attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
     </light>
   </light_list>
 
@@ -32,7 +31,6 @@
   <material_list>
     <!-- Material Descriptions -->
     <material name="Blue">
-      <texture filename=""/>
       <diffuse red="0.156" green="0.126" blue="0.507"/>
       <specular red="1" green="1" blue="1" shininess="100.0"/>
     </material>
