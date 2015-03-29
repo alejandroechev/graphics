@@ -32,6 +32,7 @@
   <material_list>
     <!-- Material Descriptions -->
     <material name="Blue">
+      <texture filename=""/>
       <diffuse red="0.156" green="0.126" blue="0.507"/>
       <specular red="1" green="1" blue="1" shininess="100.0"/>
     </material>

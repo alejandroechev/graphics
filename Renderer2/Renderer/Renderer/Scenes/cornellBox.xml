@@ -33,19 +33,16 @@
   <material_list>
     <!-- Material Descriptions -->
     <material name="Blue">
-      <texture filename=""/>
       <diffuse red="0.156" green="0.126" blue="0.507"/>
       <specular red="1" green="1" blue="1" shininess="100.0"/>
     </material>
 
     <material name="Green">
-      <texture filename=""/>
       <diffuse red="0.156" green="0.426" blue="0.107"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
     </material>
 
     <material name="Red">
-      <texture filename=""/>
       <diffuse red="0.639" green="0.06" blue="0.062"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
     </material>
@@ -57,30 +54,11 @@
     </material>
 
     <material name="White">
-      <texture filename=""/>
       <diffuse red="0.739" green="0.725" blue="0.765"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
     </material>
 
-    <material name="Mirror">
-      <texture filename=""/>
-      <diffuse red="0.0" green="0.4" blue="0.0"/>
-      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
-      <reflective red="0.5" green="0.5" blue="0.5"/>
-    </material>
-
-    <material name="Earth">
-      <diffuseTexture filename="Images/earthmap.jpg"/>
-      <diffuse red="1" green="1" blue="1"/>
-      <specular red="1" green="1" blue="1" shininess="100.0"/>
-      <!--<reflective red="0.5" green="0.5" blue="0.5"/>-->
-    </material>
-
-    <material name="Ice">
-      <diffuseTexture filename="Images/ice.jpg"/>
-      <diffuse red="0.639" green="0.6" blue="0.762"/>
-      <specular red="1" green="1" blue="1" shininess="100.0"/>
-    </material>
+   
   </material_list>
 
   <!-- List of Scene Objects -->

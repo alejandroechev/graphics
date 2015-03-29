@@ -52,8 +52,8 @@ namespace Renderer
       _scene = new Scene(RenderingParameters.Instance.ImageWidth, RenderingParameters.Instance.ImageHeight, renderObjectFactory);
       _scene.Load(RenderingParameters.Instance.ScenePath);
 
-      Width = _scene.Width * 1.2;
-      Height = _scene.Height * 1.2;
+      Width = _scene.Width * 1.5;
+      Height = _scene.Height * 1.5;
       Display.Width = _scene.Width;
       Display.Height = _scene.Height;
 
