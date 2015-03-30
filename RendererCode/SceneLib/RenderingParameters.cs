@@ -47,7 +47,7 @@ namespace SceneLib
       EnableParallelism = true;
       MultiSampleTexture = false;
 
-      EnableShadows = true;
+      EnableShadows = false;
       EnableReflections = true;
       EnableRefractions = true;
       NumberOfRecursiveRays = 6;
@@ -56,7 +56,7 @@ namespace SceneLib
       MaximumTime = 0;
       FocalDistance = 0;
       LensSize = 0;
-      EnableShading = true;
+      EnableShading = false;
       EnableSpecular = true;
       EnableAmbient = true;
     }
