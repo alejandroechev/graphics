@@ -54,16 +54,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BilinearSampler.cs" />
     <Compile Include="CameraExtensions.cs" />
+    <Compile Include="DistributionRaytracer.cs" />
     <Compile Include="IDisplay.cs" />
+    <Compile Include="IHaveTextureSampler.cs" />
     <Compile Include="IRender.cs" />
+    <Compile Include="ITextureSampler.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="NearestNeighbourSampler.cs" />
     <Compile Include="Rasterizer.cs" />
     <Compile Include="Raytracer.cs" />
     <Compile Include="AbstractRenderer.cs" />
     <Compile Include="RenderObjectFactory.cs" />
     <Compile Include="SceneLibExtensions.cs" />
     <Compile Include="Sphere.cs" />
+    <Compile Include="TextureSamplerFactory.cs" />
     <Compile Include="Triangle.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -210,6 +216,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Scenes\cornellBox - multilight - Copy.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Scenes\cornellBox - textureAliasing2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scenes\cornellBox - textureAliasing.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scenes\cornellBox - multilight.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

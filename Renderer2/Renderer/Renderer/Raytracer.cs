@@ -11,6 +11,7 @@ namespace Renderer
       get { return "Raytracer"; }
     }
 
+
     public Raytracer(Scene scene, IDisplay display)
       : base(scene, display)
     {
@@ -19,23 +20,37 @@ namespace Renderer
 
     public override void Render()
     {
-      Enumerable.Range(0, _scene.Width * _scene.Height).ToList().AsParallel().ForAll(pixel =>
+      if (!_isParallel)
       {
-        var i = pixel % _scene.Width;
-        var j = pixel / _scene.Width;
-        var color = GetSampleColor(i, j);
-        _display.SetPixel(i, j, color.R, color.G, color.B);
-      });
+        for (int i = 0; i < _scene.Width; i++)
+        {
+          for (int j = 0; j < _scene.Height; j++)
+          {
+            var color = GetSampleColor(i, j);
+            _display.SetPixel(i, j, color.R, color.G, color.B);
+          }
+        }
+      }
+      else
+      {
+        Enumerable.Range(0, _scene.Width*_scene.Height).ToList().AsParallel().ForAll(pixel =>
+        {
+          var i = pixel%_scene.Width;
+          var j = pixel/_scene.Width;
+          var color = GetSampleColor(i, j);
+          _display.SetPixel(i, j, color.R, color.G, color.B);
+        });
+      }
       _display.UpdateDisplay();
     }
 
-    private Vector GetSampleColor(float screenX, float screenY)
+    protected virtual Vector GetSampleColor(float screenX, float screenY)
     {
       var eyeRay = CreateEyeRay(screenX, screenY);
       return RayTrace(eyeRay, 0).Clamp3();
     }
 
-    private Ray CreateEyeRay(float screenX, float screenY)
+    protected Ray CreateEyeRay(float screenX, float screenY)
     {
       var sceneCamera = _scene.Camera;
       var pixelCoords = sceneCamera.PixelToCameraCoordinates(screenX, screenY, _scene.Width, _scene.Height);
@@ -49,7 +64,7 @@ namespace Renderer
     }
 
 
-    private Vector RayTrace(Ray ray, int recursion)
+    protected Vector RayTrace(Ray ray, int recursion)
     {
       IntersectObjects(ray);
       if (ray.IntersectedObject == null) return _scene.BackgroundColor;

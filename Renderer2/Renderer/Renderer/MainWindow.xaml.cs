@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,6 +24,11 @@ namespace Renderer
     private readonly List<IRender> _renderers = new List<IRender>();
     private int _currentRendererIndex = 0;
 
+    private readonly Timer _timer = new Timer();
+    private DateTime _initialTime;
+
+    private readonly TextureSamplerFactory _textureSamplerFactory = new TextureSamplerFactory();
+
     public MainWindow()
     {
       InitializeComponent();
@@ -33,7 +41,7 @@ namespace Renderer
       const float deltaCamera = 50;
       if (e.Key == Key.R)
         _currentRendererIndex = (_currentRendererIndex + 1) % _renderers.Count;
-      if(e.Key == Key.W)
+      if (e.Key == Key.W)
         _scene.Camera.MoveForward(deltaCamera);
       if (e.Key == Key.S)
         _scene.Camera.MoveForward(-deltaCamera);
@@ -41,6 +49,24 @@ namespace Renderer
         _scene.Camera.MoveSideways(-deltaCamera);
       if (e.Key == Key.D)
         _scene.Camera.MoveSideways(deltaCamera);
+      if (e.Key == Key.P)
+        _renderers[_currentRendererIndex].IsParallel = !_renderers[_currentRendererIndex].IsParallel;
+      if (e.Key == Key.B)
+      {
+        foreach (var renderObject in _scene.Objects)
+        {
+          if (renderObject is IHaveTextureSampler)
+            (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateBilinearSampler();
+        }
+      }
+      if (e.Key == Key.N)
+      {
+        foreach (var renderObject in _scene.Objects)
+        {
+          if (renderObject is IHaveTextureSampler)
+            (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateNearestNeighbourSampler();
+        }
+      }
       UpdateRenderer();
     }
 
@@ -48,7 +74,7 @@ namespace Renderer
     {
       RenderingParameters.Instance.Load();
       var meshLoader = new ObjMeshLoader();
-      var renderObjectFactory = new RenderObjectFactory(meshLoader);
+      var renderObjectFactory = new RenderObjectFactory(meshLoader, _textureSamplerFactory);
       _scene = new Scene(RenderingParameters.Instance.ImageWidth, RenderingParameters.Instance.ImageHeight, renderObjectFactory);
       _scene.Load(RenderingParameters.Instance.ScenePath);
 
@@ -63,20 +89,33 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Raytracer(_scene, this));
+      _renderers.Add(new DistributionRaytracer(_scene, this, 9));
       UpdateRenderer();
     }
 
-    private void UpdateRenderer()
+    private async void UpdateRenderer()
     {
       RendererName.Text = _renderers[_currentRendererIndex].Name;
-      _renderers[_currentRendererIndex].Render();
+      _timer.Interval = 1;
+      _timer.Elapsed += TimerChanged;
+      _timer.Start();
+      var taskFactory = new TaskFactory();
+      _initialTime = DateTime.Now;
+      await taskFactory.StartNew(() => _renderers[_currentRendererIndex].Render());
+      _bitmap = BitmapSource.Create(_width, _height,
+                96, 96, _pixelFormat, null, _pixelData, _rawStride);
+      Display.Source = _bitmap;
+      _timer.Stop();
+    }
+
+    private void TimerChanged(object sender, ElapsedEventArgs e)
+    {
+      Dispatcher.Invoke(() => RendererName.Text = _renderers[_currentRendererIndex].Name + ": " + (e.SignalTime - _initialTime).Ticks / 10000000.0f);
     }
 
     public void UpdateDisplay()
     {
-      _bitmap = BitmapSource.Create(_width, _height,
-                96, 96, _pixelFormat, null, _pixelData, _rawStride);
-      Display.Source = _bitmap;
+      
     }
 
 

@@ -7,8 +7,15 @@ namespace Renderer
   {
     protected readonly Scene _scene;
     protected readonly IDisplay _display;
+    protected bool _isParallel;
 
     public abstract string Name { get; }
+
+    public bool IsParallel
+    {
+      get { return _isParallel; }
+      set { _isParallel = value; }
+    }
 
     protected AbstractRenderer(Scene scene, IDisplay display)
     {

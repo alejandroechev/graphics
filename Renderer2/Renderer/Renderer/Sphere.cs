@@ -3,11 +3,20 @@ using SceneLib;
 
 namespace Renderer
 {
-  public class Sphere : SphereBase
+  public class Sphere : SphereBase, IHaveTextureSampler
   {
-    public Sphere(MeshBase sphereMesh)
+    private ITextureSampler _textureSampler;
+
+    public ITextureSampler TextureSampler
+    {
+      get { return _textureSampler; }
+      set { _textureSampler = value; }
+    }
+
+    public Sphere(MeshBase sphereMesh, ITextureSampler textureSampler)
       : base(sphereMesh)
     {
+      _textureSampler = textureSampler;
     }
 
     public override bool Intersect(Ray ray)
@@ -54,9 +63,8 @@ namespace Renderer
       if (material.HasDiffuseTexture)
       {
         var textureCoords = GetTextureCoords(point);
-        material.Diffuse = material.Diffuse*
-                        material.GetDiffuseTexturePixel((int)(textureCoords.X * material.GetDiffuseTextureWidth() - 1),
-                          (int) (textureCoords.Y*material.GetDiffuseTextureHeight() - 1));
+        material.Diffuse = material.Diffuse * _textureSampler.Sample(textureCoords, material.GetDiffuseTexturePixel,
+          material.GetDiffuseTextureWidth, material.GetDiffuseTextureHeight);
       }
       return material;
     }
@@ -83,5 +91,7 @@ namespace Renderer
       var textureCoords = new Vector(u, v);
       return textureCoords;
     }
+
+    
   }
 }

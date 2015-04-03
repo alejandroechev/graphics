@@ -71,7 +71,7 @@ namespace SceneLib
         if (!HasDiffuseTexture)
           return new Vector(1, 1, 1);
         if (i < 0 || i >= DiffuseTexture.Width || j < 0 || j >= DiffuseTexture.Height)
-          throw new ArgumentException("Pixel has to be inside texture");
+          return new Vector();
         var pixel = DiffuseTexture.GetPixel(i, j);
         return new Vector(pixel.R / 255.0f, pixel.G / 255.0f, pixel.B / 255.0f);
       }

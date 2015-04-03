@@ -4,9 +4,23 @@ using SceneLib;
 
 namespace Renderer
 {
-  public class Triangle : TriangleBase
+  public class Triangle : TriangleBase, IHaveTextureSampler
   {
+    private ITextureSampler _textureSampler;
+    
+    public ITextureSampler TextureSampler
+    {
+      get { return _textureSampler; }
+      set { _textureSampler = value; }
+    }
 
+
+    public Triangle(ITextureSampler textureSampler)
+    {
+      _textureSampler = textureSampler;
+    }
+
+   
     public override bool Intersect(Ray ray)
     {
       float xa = Vertices[0].Position.X;
@@ -64,13 +78,12 @@ namespace Renderer
       material.ReflectivityAttenuation = InterpolateProperty(v => v.Material.ReflectivityAttenuation, barycentricCoordinates);
       material.RefractiveAttenuation = InterpolateProperty(v => v.Material.RefractiveAttenuation, barycentricCoordinates);
       material.RefractiveIndex = InterpolateProperty(v => v.Material.RefractiveIndex, barycentricCoordinates);
-      
+
       if (material.HasDiffuseTexture)
       {
         var textureCoords = InterpolateProperty(v => v.TextureCoordinates, barycentricCoordinates);
-        material.Diffuse = material.Diffuse *
-                       material.GetDiffuseTexturePixel((int)(textureCoords.X * (material.GetDiffuseTextureWidth() - 1)),
-                         (int)(textureCoords.Y * (material.GetDiffuseTextureHeight() - 1)));
+        material.Diffuse = material.Diffuse * _textureSampler.Sample(textureCoords, material.GetDiffuseTexturePixel, 
+          material.GetDiffuseTextureWidth, material.GetDiffuseTextureHeight);
       }
       return material;
     }
@@ -92,8 +105,8 @@ namespace Renderer
 
     public Vector InterpolateProperty(Func<Vertex, Vector> getProperty, Vector barycentricCoordinates)
     {
-      return getProperty(Vertices[0])*barycentricCoordinates.X + getProperty(Vertices[1])*barycentricCoordinates.Y +
-             getProperty(Vertices[2])*barycentricCoordinates.Z;
+      return getProperty(Vertices[0]) * barycentricCoordinates.X + getProperty(Vertices[1]) * barycentricCoordinates.Y +
+             getProperty(Vertices[2]) * barycentricCoordinates.Z;
     }
 
     public float InterpolateProperty(Func<Vertex, float> getProperty, Vector barycentricCoordinates)
@@ -107,12 +120,12 @@ namespace Renderer
       return a * e * i - a * f * h - b * d * i + c * d * h + b * f * g - c * e * g;
     }
 
-    public Tuple<float,float> GetXBounds()
+    public Tuple<float, float> GetXBounds()
     {
       var min = (float)Math.Min(Vertices[0].Position.X, Math.Min(Vertices[1].Position.X, Vertices[2].Position.X));
       var max = (float)Math.Max(Vertices[0].Position.X, Math.Max(Vertices[1].Position.X, Vertices[2].Position.X));
 
-      return new Tuple<float, float>(min,max);
+      return new Tuple<float, float>(min, max);
     }
 
     public Tuple<float, float> GetYBounds()
