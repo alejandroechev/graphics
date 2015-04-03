@@ -244,6 +244,7 @@ namespace SceneLib
       var lightObj = new Light();
       lightObj.Position = XMLHelper.LoadXYZ(lightNode.Elements("position").First());
       lightObj.Color = XMLHelper.LoadColor(lightNode.Elements("color").First());
+      lightObj.Size = XMLHelper.LoadFloat(lightNode.Elements("position").First(), "size");
       _lights.Add(lightObj);
     }
 

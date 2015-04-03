@@ -29,6 +29,12 @@ namespace Renderer
       return ray;
     }
 
+    protected override Vector GetLightPosition(Light light)
+    {
+      return light.Position +
+             new Vector((float)(_randomizer.NextDouble() - 1) * light.Size * 2, 0, (float)(_randomizer.NextDouble() - 1) * light.Size * 2);
+    }
+
     protected override Vector GetSampleColor(float screenX, float screenY)
     {
       var sumOfColor = new Vector();

@@ -87,6 +87,11 @@ namespace Renderer
       return shadingColor;
     }
 
+    protected virtual Vector GetLightPosition(Light light)
+    {
+      return light.Position;
+    }
+
     private Vector DirectIllumination(Ray ray, Material material, Vector normal, Vector intersectionPoint, Vector shadingColor)
     {
       const float epsilon = 0.1f;
@@ -94,8 +99,9 @@ namespace Renderer
       foreach (var light in _scene.Lights)
       {
         var viewDirection = ray.Direction * -1;
-        var lightDirection = (light.Position - intersectionPoint).Normalize3();
-        var lightDistance = (light.Position - intersectionPoint).Magnitude3();
+        var lightPosition = GetLightPosition(light);
+        var lightDirection = (lightPosition - intersectionPoint).Normalize3();
+        var lightDistance = (lightPosition - intersectionPoint).Magnitude3();
 
         var shadowRay = CreateShadowRay(intersectionPoint, light, epsilon);
         shadowRay.Time = ray.Time;
@@ -183,7 +189,8 @@ namespace Renderer
 
     private Ray CreateShadowRay(Vector intersectionPoint, Light light, float epsilon)
     {
-      var lightDirection = (light.Position - intersectionPoint).Normalize3();
+      var lightPosition = GetLightPosition(light);
+      var lightDirection = (lightPosition - intersectionPoint).Normalize3();
       var shadowRay = new Ray(intersectionPoint + lightDirection * epsilon, lightDirection);
       return shadowRay;
     }
