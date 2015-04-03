@@ -11,7 +11,7 @@
 
   <!-- Cameras Description -->
   <camera_list>
-    <camera fieldOfView="39.31" nearClip="1" farClip="2500.0">
+    <camera fieldOfView="39.31" nearClip="1100" farClip="2500.0">
       <position x="278.0" y="273.0" z="-800.0"/>
       <target x="278.0" y="273.0" z="-700.0"/>
       <up x="0.0" y="1.0" z="0.0"/>

@@ -89,7 +89,7 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Raytracer(_scene, this));
-      _renderers.Add(new DistributionRaytracer(_scene, this, 64));
+      _renderers.Add(new DistributionRaytracer(_scene, this, 16));
       UpdateRenderer();
     }
 

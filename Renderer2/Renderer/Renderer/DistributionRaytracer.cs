@@ -21,6 +21,14 @@ namespace Renderer
       _numberOfSamplesPerPixel = numberOfSamplesPerPixel;
     }
 
+    protected override Ray CreateEyeRay(float screenX, float screenY)
+    {
+      var ray = base.CreateEyeRay(screenX, screenY);
+      var lensSize = 2.0f;
+      ray.Position += new Vector((float)(_randomizer.NextDouble() - 1) * lensSize * 2, (float)(_randomizer.NextDouble() - 1) * lensSize * 2, 0);
+      return ray;
+    }
+
     protected override Vector GetSampleColor(float screenX, float screenY)
     {
       var sumOfColor = new Vector();

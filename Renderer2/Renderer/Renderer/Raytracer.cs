@@ -50,7 +50,7 @@ namespace Renderer
       return RayTrace(eyeRay, 0).Clamp3();
     }
 
-    protected Ray CreateEyeRay(float screenX, float screenY)
+    protected virtual Ray CreateEyeRay(float screenX, float screenY)
     {
       var sceneCamera = _scene.Camera;
       var pixelCoords = sceneCamera.PixelToCameraCoordinates(screenX, screenY, _scene.Width, _scene.Height);
