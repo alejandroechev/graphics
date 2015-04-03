@@ -60,15 +60,17 @@ namespace Renderer
       return true;
     }
 
-    public override Vector GetNormal(Vector point)
+    public override Vector GetNormal(Ray ray)
     {
+      var point = ray.GetIntersectionPoint();
       var barycentricCoordinates = GetBarycentricCoordinates(point);
       var interpolatedNormal = InterpolateProperty(v => v.Normal, barycentricCoordinates);
       return interpolatedNormal.Normalize3();
     }
 
-    public override Material GetMaterial(Vector point)
+    public override Material GetMaterial(Ray ray)
     {
+      var point = ray.GetIntersectionPoint();
       var barycentricCoordinates = GetBarycentricCoordinates(point);
       var material = Vertices[0].Material.Clone();
       material.Diffuse = InterpolateProperty(v => v.Material.Diffuse, barycentricCoordinates);

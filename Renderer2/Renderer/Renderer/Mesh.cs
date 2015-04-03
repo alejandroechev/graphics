@@ -29,16 +29,16 @@ namespace Renderer
       return tMin < float.MaxValue;
     }
 
-    public override Vector GetNormal(Vector point)
+    public override Vector GetNormal(Ray ray)
     {
       if (_currentIntersectedPolygon == null) throw new ApplicationException("Missing current polygon intersected. Either Intersect method wasnt called, or it didnt found an intersection with this mesh");
-      return _currentIntersectedPolygon.GetNormal(point);
+      return _currentIntersectedPolygon.GetNormal(ray);
     }
 
-    public override Material GetMaterial(Vector point)
+    public override Material GetMaterial(Ray ray)
     {
       if (_currentIntersectedPolygon == null) throw new ApplicationException("Missing current polygon intersected. Either Intersect method wasnt called, or it didnt found an intersection with this mesh");
-      return _currentIntersectedPolygon.GetMaterial(point);
+      return _currentIntersectedPolygon.GetMaterial(ray);
     }
   }
 }

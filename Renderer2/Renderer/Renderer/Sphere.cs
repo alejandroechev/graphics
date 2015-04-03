@@ -21,9 +21,10 @@ namespace Renderer
 
     public override bool Intersect(Ray ray)
     {
+      var spherePosition = Center + ray.Time*Velocity;
       var a = Vector.Dot3(ray.Direction, ray.Direction);
-      var b = 2 * Vector.Dot3((ray.Position - Center), ray.Direction);
-      var c = Vector.Dot3((ray.Position - Center), (ray.Position - Center)) - (Radius * Radius);
+      var b = 2 * Vector.Dot3((ray.Position - spherePosition), ray.Direction);
+      var c = Vector.Dot3((ray.Position - spherePosition), (ray.Position - spherePosition)) - (Radius * Radius);
 
       var discr = b * b - 4 * a * c;
       if (discr < 0)
@@ -51,14 +52,17 @@ namespace Renderer
       return false;
     }
 
-    public override Vector GetNormal(Vector point)
+    public override Vector GetNormal(Ray ray)
     {
-      var currentPosition = Center;
+      var point = ray.GetIntersectionPoint();
+      var spherePosition = Center + ray.Time * Velocity;
+      var currentPosition = spherePosition;
       return (point - currentPosition).Normalize3();
     }
 
-    public override Material GetMaterial(Vector point)
+    public override Material GetMaterial(Ray ray)
     {
+      var point = ray.GetIntersectionPoint();
       var material = Material.Clone();
       if (material.HasDiffuseTexture)
       {
@@ -92,6 +96,5 @@ namespace Renderer
       return textureCoords;
     }
 
-    
   }
 }

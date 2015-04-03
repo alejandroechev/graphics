@@ -77,8 +77,8 @@ namespace Renderer
       var intersectedObject = ray.IntersectedObject;
 
       var intersectionPoint = ray.Position + (ray.Direction * intersectedDitance);
-      var normal = intersectedObject.GetNormal(intersectionPoint);
-      var material = intersectedObject.GetMaterial(intersectionPoint);
+      var normal = intersectedObject.GetNormal(ray);
+      var material = intersectedObject.GetMaterial(ray);
 
       var shadingColor = _scene.AmbientLight * material.Diffuse;
       shadingColor = DirectIllumination(ray, material, normal, intersectionPoint, shadingColor);
@@ -98,6 +98,7 @@ namespace Renderer
         var lightDistance = (light.Position - intersectionPoint).Magnitude3();
 
         var shadowRay = CreateShadowRay(intersectionPoint, light, epsilon);
+        shadowRay.Time = ray.Time;
         IntersectObjects(shadowRay);
 
         if (shadowRay.IntersectedObject == null || shadowRay.IntersectionDistance >= lightDistance)
@@ -114,7 +115,7 @@ namespace Renderer
         const float epsilon = 0.1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
-
+        reflectedRay.Time = ray.Time;
         var dDotN = Vector.Dot3(ray.Direction, normal);
         var nt = material.RefractiveIndex;
         Vector refractionDirection;
@@ -141,6 +142,7 @@ namespace Renderer
           var r0 = ((nt - 1) * (nt - 1)) / ((nt + 1) * (nt + 1));
           var r = r0 + (1 - r0) * (float)Math.Pow(1 - cosine, 5);
           var refractedRay = new Ray(intersectionPoint + refractionDirection * epsilon, refractionDirection);
+          refractedRay.Time = ray.Time;
           shadingColor += material.RefractiveAttenuation *
                           (r * RayTrace(reflectedRay, recursion + 1) + (1 - r) * RayTrace(refractedRay, recursion + 1));
         }
@@ -156,6 +158,7 @@ namespace Renderer
         const float epsilon = 0.1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
+        reflectedRay.Time = ray.Time;
         shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, recursion + 1);
       }
       return shadingColor;

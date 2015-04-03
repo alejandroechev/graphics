@@ -8,6 +8,7 @@ namespace Renderer
   {
     private readonly object _syncObject = new object();
     private readonly int _numberOfSamplesPerPixel;
+    private Random _randomizer = new Random(0);
 
     public override string Name
     {
@@ -30,13 +31,17 @@ namespace Renderer
 
       if (!_isParallel)
       {
+        float time = 0.0f;
+        float deltaTime = 1.0f / _numberOfSamplesPerPixel;
         for (int i = 0; i < gridSize; i++)
         {
-          var gridX = initialGridX + (i + 1) * deltaSize;
+          var gridX = initialGridX + (i + 1) * deltaSize + deltaSize * (float)(_randomizer.NextDouble() - 1);
           for (int j = 0; j < gridSize; j++)
           {
-            var gridY = initialGridY + (j + 1) * deltaSize;
+            var gridY = initialGridY + (j + 1) * deltaSize + deltaSize * (float)(_randomizer.NextDouble() - 1);
             var eyeRay = CreateEyeRay(gridX, gridY);
+            time += deltaTime;
+            eyeRay.Time = time;
             sumOfColor += RayTrace(eyeRay, 0).Clamp3();
           }
         }
@@ -50,6 +55,7 @@ namespace Renderer
           var gridX = initialGridX + (i + 1) * deltaSize;
           var gridY = initialGridY + (j + 1) * deltaSize;
           var eyeRay = CreateEyeRay(gridX, gridY);
+          eyeRay.Time = (float)pixel / (float)(gridSize * gridSize);
           lock (_syncObject)
             sumOfColor += RayTrace(eyeRay, 0).Clamp3();
 
