@@ -10,7 +10,7 @@ namespace SceneLib
   {
     private readonly IMeshLoader _meshLoader;
     private readonly IRenderObjectFactory _renderObjectFactory;
-    private readonly List<TriangleBase> _triangles = new List<TriangleBase>(); 
+    protected readonly List<TriangleBase> _triangles = new List<TriangleBase>(); 
 
     public string FilePath { get; set; }
     public Material Material { get; set; }
@@ -47,7 +47,7 @@ namespace SceneLib
       _triangles.Add(polygon);
     }
 
-    public TriangleBase AddPolygon(List<Vertex> vertices )
+    public virtual TriangleBase AddPolygon(List<Vertex> vertices )
     {
       var polygon = _renderObjectFactory.CreateTriangle();
       vertices.ForEach(v => v.Material = Material);

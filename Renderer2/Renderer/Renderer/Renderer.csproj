@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BilinearSampler.cs" />
+    <Compile Include="Box.cs" />
     <Compile Include="CameraExtensions.cs" />
     <Compile Include="DistributionRaytracer.cs" />
     <Compile Include="IDisplay.cs" />
