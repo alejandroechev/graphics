@@ -9,6 +9,7 @@ namespace Renderer
     private readonly object _syncObject = new object();
     private readonly int _numberOfSamplesPerPixel;
     private Random _randomizer = new Random(0);
+    private float[,] _gaussianKernel;
 
     public override string Name
     {
@@ -19,12 +20,14 @@ namespace Renderer
       : base(scene, display)
     {
       _numberOfSamplesPerPixel = numberOfSamplesPerPixel;
+      var gridSize = (int)Math.Sqrt(_numberOfSamplesPerPixel);
+      _gaussianKernel = GetGaussianKernel(gridSize);
     }
 
     protected override Ray CreateEyeRay(float screenX, float screenY)
     {
       var ray = base.CreateEyeRay(screenX, screenY);
-      var lensSize = 2.0f;
+      var lensSize = 0.0f;
       ray.Position += new Vector((float)(_randomizer.NextDouble() - 1) * lensSize * 2, (float)(_randomizer.NextDouble() - 1) * lensSize * 2, 0);
       return ray;
     }
@@ -35,6 +38,33 @@ namespace Renderer
              new Vector((float)(_randomizer.NextDouble() - 1) * light.Size * 2, 0, (float)(_randomizer.NextDouble() - 1) * light.Size * 2);
     }
 
+    protected float[,] GetGaussianKernel(int size)
+    {
+      var sigma = 1.0f;
+      var mean = size/2.0f;
+      var kernel = new float[size, size];
+      var sum = 0.0f;
+
+      for (int i = 0; i < size; i++)
+      {
+        for (int j = 0; j < size; j++)
+        {
+          kernel[i, j] = (float)
+            Math.Exp(-0.5*(Math.Pow((i - mean)/sigma, 2) + Math.Pow((j - mean)/sigma, 2))/(2*Math.PI*sigma*sigma));
+          sum += kernel[i, j];
+        }
+      }
+
+      for (int i = 0; i < size; i++)
+      {
+        for (int j = 0; j < size; j++)
+        {
+          kernel[i, j] /= sum;
+        }
+      }
+      return kernel;
+    }
+
     protected override Vector GetSampleColor(float screenX, float screenY)
     {
       var sumOfColor = new Vector();
@@ -42,7 +72,7 @@ namespace Renderer
       var deltaSize = 1.0f / (gridSize + 1);
       var initialGridX = (screenX - 0.5f);
       var initialGridY = (screenY - 0.5f);
-
+      var gaussianKernel = _gaussianKernel;
       if (!_isParallel)
       {
         float time = 0.0f;
@@ -56,7 +86,7 @@ namespace Renderer
             var eyeRay = CreateEyeRay(gridX, gridY);
             time += deltaTime;
             eyeRay.Time = time;
-            sumOfColor += RayTrace(eyeRay, 0).Clamp3();
+            sumOfColor += gaussianKernel[i,j] * RayTrace(eyeRay, 0).Clamp3();
           }
         }
       }
@@ -71,12 +101,12 @@ namespace Renderer
           var eyeRay = CreateEyeRay(gridX, gridY);
           eyeRay.Time = (float)pixel / (float)(gridSize * gridSize);
           lock (_syncObject)
-            sumOfColor += RayTrace(eyeRay, 0).Clamp3();
+            sumOfColor += gaussianKernel[i, j] * RayTrace(eyeRay, 0).Clamp3();
 
         });
       }
-      var averageColor = sumOfColor / (gridSize * gridSize);
-      return averageColor;
+      //var averageColor = sumOfColor / (gridSize * gridSize);
+      return sumOfColor;
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
-  <window width="128" height="128"/>
-  <scene path ="Scenes/teapot.xml"/>
+  <window width="512" height="512"/>
+  <scene path ="Scenes/cornellBox.xml"/>
 
 </config>

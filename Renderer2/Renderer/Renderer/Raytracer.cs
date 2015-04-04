@@ -118,7 +118,7 @@ namespace Renderer
     {
       if (material.RefractiveIndex > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
-        const float epsilon = 0.1f;
+        const float epsilon = 1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
         reflectedRay.Time = ray.Time;
@@ -161,7 +161,7 @@ namespace Renderer
     {
       if (material.ReflectivityAttenuation > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
-        const float epsilon = 0.1f;
+        const float epsilon = 1f;
         var reflectionDirection = GetReflectionDirection(ray, normal);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
         reflectedRay.Time = ray.Time;

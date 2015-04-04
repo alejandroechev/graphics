@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -40,17 +41,36 @@ namespace Renderer
     {
       const float deltaCamera = 50;
       if (e.Key == Key.R)
-        _currentRendererIndex = (_currentRendererIndex + 1) % _renderers.Count;
+      {
+        _currentRendererIndex = (_currentRendererIndex + 1)%_renderers.Count;
+        UpdateRenderer();
+      }
       if (e.Key == Key.W)
+      {
         _scene.Camera.MoveForward(deltaCamera);
+        UpdateRenderer();
+      }
       if (e.Key == Key.S)
+      {
         _scene.Camera.MoveForward(-deltaCamera);
+        UpdateRenderer();
+      }
       if (e.Key == Key.A)
+      {
         _scene.Camera.MoveSideways(-deltaCamera);
+        UpdateRenderer();
+      }
+
       if (e.Key == Key.D)
+      {
         _scene.Camera.MoveSideways(deltaCamera);
+        UpdateRenderer();
+      }
       if (e.Key == Key.P)
+      {
         _renderers[_currentRendererIndex].IsParallel = !_renderers[_currentRendererIndex].IsParallel;
+        UpdateRenderer();
+      }
       if (e.Key == Key.B)
       {
         foreach (var renderObject in _scene.Objects)
@@ -58,6 +78,7 @@ namespace Renderer
           if (renderObject is IHaveTextureSampler)
             (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateBilinearSampler();
         }
+        UpdateRenderer();
       }
       if (e.Key == Key.N)
       {
@@ -66,8 +87,18 @@ namespace Renderer
           if (renderObject is IHaveTextureSampler)
             (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateNearestNeighbourSampler();
         }
+        UpdateRenderer();
       }
-      UpdateRenderer();
+      if (e.Key == Key.G)
+      {
+        using (var fileStream = new FileStream("image.png", FileMode.Create))
+        {
+          var encoder = new PngBitmapEncoder();
+          encoder.Frames.Add(BitmapFrame.Create(_bitmap));
+          encoder.Save(fileStream);
+        }
+      }
+      
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -80,8 +111,8 @@ namespace Renderer
 
       Width = _scene.Width * 1.5;
       Height = _scene.Height * 1.5;
-      Display.Width = _scene.Width;
-      Display.Height = _scene.Height;
+      //Display.Width = _scene.Width;
+      //Display.Height = _scene.Height;
 
       _width = _scene.Width;
       _height = _scene.Height;
@@ -89,7 +120,7 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Raytracer(_scene, this));
-      _renderers.Add(new DistributionRaytracer(_scene, this, 256));
+      _renderers.Add(new DistributionRaytracer(_scene, this, 9));
       UpdateRenderer();
     }
 

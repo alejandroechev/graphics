@@ -9,6 +9,6 @@
       <RowDefinition Height="20"></RowDefinition>
     </Grid.RowDefinitions>
     <TextBlock Name="RendererName" Foreground="White"></TextBlock>
-    <Image Grid.Row="1"  Name="Display" Width="512" Height="512"/>
+    <Image Grid.Row="1"  Name="Display"/>
   </Grid>
 </Window>

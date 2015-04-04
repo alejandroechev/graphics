@@ -23,7 +23,7 @@
     <!-- Light Description, Color & Position -->
     <light>
       <color red="0.8" green="0.7" blue="0.6"/>
-      <position x="278.0" y="547.8" z="279.5" size="50"/>
+      <position x="278.0" y="527.8" z="279.5" size="0"/>
     </light>
 
     <!--<light>
@@ -31,10 +31,10 @@
       <position x="0.5" y="275.8" z="275.5" size="50"/>
     </light>-->
 
-    <light>
+    <!--<light>
       <color red="0.8" green="0.7" blue="0.6"/>
       <position x="0.5" y="0.5" z="0.5" size="50"/>
-    </light>
+    </light>-->
   </light_list>
 
   <!-- Material Type Collection -->

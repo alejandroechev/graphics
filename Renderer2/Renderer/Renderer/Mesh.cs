@@ -39,8 +39,8 @@ namespace Renderer
 
     public override bool Intersect(Ray ray)
     {
-      if (!_boundingBox.Intersect(ray))
-        return false;
+      //if (!_boundingBox.Intersect(ray))
+      //  return false;
 
       float tMin = float.MaxValue;
       foreach (var polygon in Triangles)
