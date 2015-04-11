@@ -46,20 +46,20 @@ namespace Renderer
 
     protected virtual Vector GetSampleColor(float screenX, float screenY)
     {
-      var eyeRay = CreateEyeRay(screenX, screenY);
+      var eyeRay = CreateEyeRay(screenX, screenY, _scene.Camera.Position);
       return RayTrace(eyeRay, 0).Clamp3();
     }
 
-    protected virtual Ray CreateEyeRay(float screenX, float screenY)
+    protected virtual Ray CreateEyeRay(float screenX, float screenY, Vector cameraPosition)
     {
       var sceneCamera = _scene.Camera;
       var pixelCoords = sceneCamera.PixelToCameraCoordinates(screenX, screenY, _scene.Width, _scene.Height);
       var coordinateBasis = sceneCamera.GetCameraCoordinatesBasis();
       var pixelWorldCoords = sceneCamera.Position + coordinateBasis[0] * (pixelCoords.X) + coordinateBasis[1] * (pixelCoords.Y) +
                              coordinateBasis[2] * (pixelCoords.Z);
-      var direction = pixelWorldCoords - _scene.Camera.Position;
+      var direction = pixelWorldCoords - cameraPosition;
       direction = direction.Normalize3();
-      var eyeRay = new Ray(_scene.Camera.Position, direction); // eye rays
+      var eyeRay = new Ray(cameraPosition, direction); // eye rays
       return eyeRay;
     }
 
@@ -99,7 +99,7 @@ namespace Renderer
       foreach (var light in _scene.Lights)
       {
         var viewDirection = ray.Direction * -1;
-        var lightPosition = GetLightPosition(light);
+        var lightPosition = light.Position;
         var lightDirection = (lightPosition - intersectionPoint).Normalize3();
         var lightDistance = (lightPosition - intersectionPoint).Magnitude3();
 

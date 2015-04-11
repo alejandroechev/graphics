@@ -232,6 +232,15 @@
     <Content Include="Scenes\cornellBox.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scenes\softshadows.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scenes\depthoffield.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scenes\motionblur.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scenes\cornellBoxDistribution.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

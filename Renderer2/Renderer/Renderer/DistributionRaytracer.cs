@@ -24,24 +24,27 @@ namespace Renderer
       _gaussianKernel = GetGaussianKernel(gridSize);
     }
 
-    protected override Ray CreateEyeRay(float screenX, float screenY)
+    protected override Ray CreateEyeRay(float screenX, float screenY, Vector cameraPosition)
     {
-      var ray = base.CreateEyeRay(screenX, screenY);
-      var lensSize = 0.0f;
-      ray.Position += new Vector((float)(_randomizer.NextDouble() - 1) * lensSize * 2, (float)(_randomizer.NextDouble() - 1) * lensSize * 2, 0);
+      var lensSize = _scene.Camera.LensSize;
+      cameraPosition = cameraPosition + new Vector((float)(_randomizer.NextDouble() - 0.5) * lensSize * 2, (float)(_randomizer.NextDouble() - 0.5) * lensSize * 2, 0);
+      var ray = base.CreateEyeRay(screenX, screenY, cameraPosition);
       return ray;
     }
 
     protected override Vector GetLightPosition(Light light)
     {
-      return light.Position +
-             new Vector((float)(_randomizer.NextDouble() - 1) * light.Size * 2, 0, (float)(_randomizer.NextDouble() - 1) * light.Size * 2);
+      var randomX = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
+      var randomY = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
+      var newLightPosition = light.Position +
+             new Vector(randomX * light.Size, 0, randomY * light.Size);
+      return newLightPosition;
     }
 
     protected float[,] GetGaussianKernel(int size)
     {
       var sigma = 1.0f;
-      var mean = size/2.0f;
+      var mean = size / 2.0f;
       var kernel = new float[size, size];
       var sum = 0.0f;
 
@@ -50,7 +53,7 @@ namespace Renderer
         for (int j = 0; j < size; j++)
         {
           kernel[i, j] = (float)
-            Math.Exp(-0.5*(Math.Pow((i - mean)/sigma, 2) + Math.Pow((j - mean)/sigma, 2))/(2*Math.PI*sigma*sigma));
+            Math.Exp(-0.5 * (Math.Pow((i - mean) / sigma, 2) + Math.Pow((j - mean) / sigma, 2)) / (2 * Math.PI * sigma * sigma));
           sum += kernel[i, j];
         }
       }
@@ -83,10 +86,10 @@ namespace Renderer
           for (int j = 0; j < gridSize; j++)
           {
             var gridY = initialGridY + (j + 1) * deltaSize + deltaSize * (float)(_randomizer.NextDouble() - 1);
-            var eyeRay = CreateEyeRay(gridX, gridY);
+            var eyeRay = CreateEyeRay(gridX, gridY, _scene.Camera.Position);
             time += deltaTime;
             eyeRay.Time = time;
-            sumOfColor += gaussianKernel[i,j] * RayTrace(eyeRay, 0).Clamp3();
+            sumOfColor += gaussianKernel[i, j] * RayTrace(eyeRay, 0).Clamp3();
           }
         }
       }
@@ -98,7 +101,7 @@ namespace Renderer
           var j = pixel / _scene.Width;
           var gridX = initialGridX + (i + 1) * deltaSize;
           var gridY = initialGridY + (j + 1) * deltaSize;
-          var eyeRay = CreateEyeRay(gridX, gridY);
+          var eyeRay = CreateEyeRay(gridX, gridY, _scene.Camera.Position);
           eyeRay.Time = (float)pixel / (float)(gridSize * gridSize);
           lock (_syncObject)
             sumOfColor += gaussianKernel[i, j] * RayTrace(eyeRay, 0).Clamp3();

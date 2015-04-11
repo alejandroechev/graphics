@@ -56,9 +56,9 @@ namespace SceneLib
       MaximumTime = 0;
       FocalDistance = 0;
       LensSize = 0;
-      EnableShading = false;
-      EnableSpecular = true;
-      EnableAmbient = true;
+      EnableShading = true;
+      EnableSpecular = false;
+      EnableAmbient = false;
     }
 
     public void Load()

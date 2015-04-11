@@ -254,6 +254,7 @@ namespace SceneLib
       camera.FieldOfView = XMLHelper.LoadFloat(xmlCamera, "fieldOfView");
       camera.NearClip = XMLHelper.LoadFloat(xmlCamera, "nearClip");
       camera.FarClip = XMLHelper.LoadFloat(xmlCamera, "farClip");
+      camera.LensSize = XMLHelper.LoadFloat(xmlCamera, "lensSize");
       camera.Position = XMLHelper.LoadXYZ(xmlCamera.Elements("position").First());
       camera.Target = XMLHelper.LoadXYZ(xmlCamera.Elements("target").First());
       camera.Up = XMLHelper.LoadXYZ(xmlCamera.Elements("up").First());

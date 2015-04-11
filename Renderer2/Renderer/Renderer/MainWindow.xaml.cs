@@ -98,7 +98,19 @@ namespace Renderer
           encoder.Save(fileStream);
         }
       }
-      
+      if (e.Key == Key.I)
+      {
+        _scene.Camera.NearClip += 100.0f;
+        Console.WriteLine(_scene.Camera.NearClip);
+        UpdateRenderer();
+      }
+      if (e.Key == Key.K)
+      {
+        _scene.Camera.NearClip -= 100.0f;
+        Console.WriteLine(_scene.Camera.NearClip);
+        UpdateRenderer();
+      }
+
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
