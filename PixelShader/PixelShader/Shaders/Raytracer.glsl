@@ -6,7 +6,6 @@ in vec2 pixelCoords;
 out vec4 pixelColor;
 
 const float infinity = 1. / 0.;
-const int numLights = 1;
 
 vec2 resolution = vec2(512,512);
 uniform vec2 mouse;
@@ -16,6 +15,7 @@ uniform float time;
 struct Sphere {
   vec3 position;
   float radius;
+  int materialIndex;
 };
 
 struct Material {
@@ -43,13 +43,16 @@ struct Scene {
   vec4 background;
 };
 
-Sphere spheres[2];
-Material materials[5];
-Light lights[2];
+const int numberOfSpheres = 7;
+const int numLights = 1;
+const int numberOfMaterials = 5;
+
+Sphere spheres[numberOfSpheres];
+Material materials[numberOfMaterials];
+Light lights[numLights];
 Camera camera = Camera(vec3(278, 273, 800));
 Scene scene = Scene(vec4(0.2,0.2,0.2,1), vec4(0,0,0,1));
 
-float boxMaxDepth = -559.2;
 
 //ray-sphere intersection
 float intersect(Ray ray, Sphere sphere)
@@ -74,7 +77,7 @@ float intersect(Ray ray, Sphere sphere)
 
 }
 
-//Blinn phong shading
+//blinn-phong shading
 vec4 blinnPhongShading(vec3 p, vec3 n, Material material)
 {
   n = normalize(n);
@@ -98,98 +101,58 @@ bool isInShadow(vec3 p, Sphere sphere)
 {
   for(int i=0; i<numLights; i++)
   {
+	float lightDistance = distance(lights[i].position, p);
     vec3 shadowDir = normalize(lights[i].position - p);
     Ray shadowRay = Ray(p + 0.1 * shadowDir, shadowDir);    
     float tShadow = intersect(shadowRay, sphere);
-    if(!isinf(tShadow))
+    if(!isinf(tShadow) && tShadow < lightDistance)
       return true;
   }
   return false;
 }
 
+bool isInOtherSphereShadow(vec3 p, int thisSphereIndex)
+{
+	for(int i=0; i<numberOfSpheres; i++)
+	{
+		if(i != thisSphereIndex)
+		{
+			if(isInShadow(p, spheres[i]))
+				return true;
+		}
+	}
+	return false;
+}
 
 vec4 rayTrace(Ray ray)
 {
-  float t1 = intersect(ray, spheres[0]);
-  float t2 = intersect(ray, spheres[1]);
-  float tFloor = -ray.position.y / ray.direction.y;	
-  float tCeiling = (550.0-ray.position.y) / ray.direction.y;	
-  float tLeft = (-ray.position.x) / ray.direction.x;	
-  float tRight = (550.0-ray.position.x) / ray.direction.x;	
-  float tBack = (-550.0-ray.position.z) / ray.direction.z;	
-
-  vec3 p = vec3(0,0,0);
-  vec3 n = vec3(0,0,0);
-  if(!isinf(t1) && (isinf(t2) || t1 < t2))
-  {
-    p = ray.position + t1*ray.direction;
-    n = p - spheres[0].position;
-    if(isInShadow(p, spheres[1]))
-      return scene.ambient * materials[0].diffuse;
-    return blinnPhongShading(p, n, materials[0]);
-  }
-  else if(!isinf(t2) && (isinf(t1) || t2 < t1))
-  {
-    p = ray.position + t2*ray.direction;
-    n = p - spheres[1].position;
-    if(isInShadow(p, spheres[0]))
-      return scene.ambient * materials[1].diffuse;   
-    return blinnPhongShading(p, n, materials[1]);
+  float tMin = infinity;
+  int sphereMin = -1;
+  for(int i=0; i<numberOfSpheres; i++)
+  {	
+	float t = intersect(ray, spheres[i]);
+	if(t < tMin)
+	{
+		tMin = t;
+		sphereMin = i;
+	}
   }
 
-  p = ray.position + tFloor * ray.direction;
-  if(p.x > 0.0 && p.x < 550.0 && p.z > boxMaxDepth && p.z < 0.0)
+  if(!isinf(tMin))
   {
-    n = vec3(0,1,0);
-    if(isInShadow(p, spheres[0]) || isInShadow(p, spheres[1]))
-      return scene.ambient * materials[2].diffuse;
-    return blinnPhongShading(p, n, materials[2]);  	
-  }
+	vec3 p = ray.position + tMin*ray.direction;
+	vec3 n = p - spheres[sphereMin].position;
+	if(isInOtherSphereShadow(p, sphereMin))
+		return scene.ambient * materials[spheres[sphereMin].materialIndex].diffuse;
+	return blinnPhongShading(p, n, materials[spheres[sphereMin].materialIndex]);
+  }  
 
-  p = ray.position + tCeiling * ray.direction;
-  if(p.x > 0.0 && p.x < 550.0 && p.z > boxMaxDepth && p.z < 0.0)
-  {
-    n = vec3(0,-1,0);
-    if(isInShadow(p, spheres[0]) || isInShadow(p, spheres[1]))
-      return scene.ambient * materials[2].diffuse;
-    return blinnPhongShading(p, n, materials[2]);  	
-  }
-
-  p = ray.position + tLeft * ray.direction;
-  if(p.y > 0.0 && p.y < 550.0 && p.z > boxMaxDepth && p.z < 0.0)
-  {
-    n = vec3(1,0,0);
-    if(isInShadow(p, spheres[0]) || isInShadow(p, spheres[1]))
-      return scene.ambient * materials[3].diffuse;   
-    return blinnPhongShading(p, n, materials[3]);  	
-  }
-
-  p = ray.position + tRight * ray.direction;
-  if(p.y > 0.0 && p.y < 550.0 && p.z > boxMaxDepth && p.z < 0.0)
-  {
-    n = vec3(-1,0,0);
-    if(isInShadow(p, spheres[0]) || isInShadow(p, spheres[1]))
-      return scene.ambient * materials[4].diffuse;
-    return blinnPhongShading(p, n, materials[4]);  	
-  }
-
-  p = ray.position + tBack * ray.direction;
-  if(p.y > 0.0 && p.y < 550.0 && p.x > 0.0 && p.x < 550.0)
-  {
-    n = vec3(0,0,1);
-    if(isInShadow(p, spheres[0]) || isInShadow(p, spheres[1]))
-      return scene.ambient * materials[2].diffuse;
-    return blinnPhongShading(p, n, materials[2]);   	
-  }
 
   return scene.background;
 }
 
 void init()
 { 
-  spheres[0] = Sphere(vec3(180, 120, -370), 120);
-  spheres[1] = Sphere(vec3(420, 100, -130), 100);
-
   materials[0] = Material(vec4(0.156,0.126,0.507,1), vec4(1,1,1,1), 100);   // Blue specular
   materials[1] = Material(vec4(0.656,0.626,0.107,1), vec4(0,0,0,1), 1);     // Yellow
   materials[2] = Material(vec4(0.739, 0.725, 0.765, 1), vec4(0,0,0,1), 1);  // White
@@ -197,7 +160,16 @@ void init()
   materials[4] = Material(vec4(0.156, 0.426, 0.107, 1), vec4(0,0,0,1), 1);  // Green
 
   lights[0] = Light(vec3(0.5,1.0,0.5),  vec4(0.8,0.7,0.6,1));
-  lights[1] = Light(vec3(250,250,-250),  vec4(0.8,0.7,0.6,1));
+  //lights[1] = Light(vec3(250,250,-250),  vec4(0.8,0.7,0.6,1));
+
+  spheres[0] = Sphere(vec3(180, 120, -370), 120, 0); //Blue sphere
+  spheres[1] = Sphere(vec3(420, 100, -130), 100, 1); //Yellow sphere
+  spheres[2] = Sphere(vec3(275, 275, -30550), 30000, 2); //Back wall
+  spheres[3] = Sphere(vec3(275, 30550, -275), 30000, 2); //Ceiling
+  spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
+  spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 3); //Left wall
+  spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 4); //Right wall
+
 }
 
 void main(void)

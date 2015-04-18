@@ -12,5 +12,5 @@ uniform float time;
 
 void main(void)
 { 
-  pixelColor = vec4(pixelCoords.x, pixelCoords.y, 1,1);
+  pixelColor = vec4(pixelCoords.x, pixelCoords.y, 1,1)
 }
