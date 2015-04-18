@@ -154,7 +154,7 @@
       <rotation x="0.0" y="0.0" z="0.0"/>
       <position x="0.0" y="0.0" z="0.0"/>
       <center x="100.0" y="50.0" z="80.0"/>
-      <velocity x="0.0" y="0.0" z="0.0"/>
+      <velocity x="30.0" y="0.0" z="30.0"/>
     </sphere>
 
   </object_list>

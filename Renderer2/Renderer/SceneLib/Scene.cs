@@ -231,7 +231,11 @@ namespace SceneLib
       if (materialNode.Elements("diffuse").Any())
         material.Diffuse = XMLHelper.LoadColor(materialNode.Elements("diffuse").First());
       if (materialNode.Elements("reflective").Any())
-        material.ReflectivityAttenuation = XMLHelper.LoadFloat(materialNode.Elements("reflective").First(), "attenuation");
+      {
+        material.ReflectivityAttenuation = XMLHelper.LoadFloat(materialNode.Elements("reflective").First(),
+          "attenuation");
+        material.Glossy = XMLHelper.LoadFloat(materialNode.Elements("reflective").First(), "glossy");
+      }
       if (materialNode.Elements("refractive").Any())
         material.RefractiveIndex = XMLHelper.LoadFloat(materialNode.Elements("refractive").First(), "index");
       if (materialNode.Elements("refractive").Any())

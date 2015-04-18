@@ -24,6 +24,7 @@ namespace SceneLib
     public float RefractiveIndex { get; set; }
     public float RefractiveAttenuation { get; set; }
     public float Shininess { get; set; }
+    public float Glossy { get; set; }
 
     public Material()
     {
@@ -41,6 +42,7 @@ namespace SceneLib
       material.RefractiveIndex = RefractiveIndex;
       material.RefractiveAttenuation = RefractiveAttenuation;
       material.Shininess = Shininess;
+      material.Glossy = Glossy;
       return material;
     }
 

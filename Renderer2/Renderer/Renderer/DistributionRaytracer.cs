@@ -41,6 +41,27 @@ namespace Renderer
       return newLightPosition;
     }
 
+    protected override Vector GetReflectionDirection(Ray ray, Vector normal, Material material)
+    {
+      var baseRef = base.GetReflectionDirection(ray, normal, material);
+      var t = new Vector(baseRef.X, baseRef.Y, baseRef.Z);
+      if (t.X < t.Y && t.X < t.Z)
+        t.X = 1;
+      else if (t.Y < t.X && t.Y < t.Z)
+        t.Y = 1;
+      else
+        t.Z = 1;
+      t = t.Normalize3();
+      var u = Vector.Cross3(baseRef, t).Normalize3();
+      var v = Vector.Cross3(baseRef, u).Normalize3();
+
+      var randomX = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
+      var randomY = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
+
+      var newRef = baseRef + randomX * material.Glossy * u + randomY * material.Glossy * v;
+      return newRef;
+    }
+
     protected float[,] GetGaussianKernel(int size)
     {
       var sigma = 1.0f;

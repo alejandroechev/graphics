@@ -62,6 +62,7 @@
     <Compile Include="IHaveTextureSampler.cs" />
     <Compile Include="IRender.cs" />
     <Compile Include="ITextureSampler.cs" />
+    <Compile Include="MatrixExtensions.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="NearestNeighbourSampler.cs" />
     <Compile Include="Rasterizer.cs" />
@@ -230,6 +231,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scenes\cornellBox.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scenes\glossy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scenes\softshadows.xml">

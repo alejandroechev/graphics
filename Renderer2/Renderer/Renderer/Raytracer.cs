@@ -119,7 +119,7 @@ namespace Renderer
       if (material.RefractiveIndex > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
         const float epsilon = 1f;
-        var reflectionDirection = GetReflectionDirection(ray, normal);
+        var reflectionDirection = GetReflectionDirection(ray, normal, material);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
         reflectedRay.Time = ray.Time;
         var dDotN = Vector.Dot3(ray.Direction, normal);
@@ -162,7 +162,7 @@ namespace Renderer
       if (material.ReflectivityAttenuation > 0 && recursion < RenderingParameters.Instance.NumberOfRecursiveRays)
       {
         const float epsilon = 1f;
-        var reflectionDirection = GetReflectionDirection(ray, normal);
+        var reflectionDirection = GetReflectionDirection(ray, normal, material);
         var reflectedRay = new Ray(intersectionPoint + reflectionDirection * epsilon, reflectionDirection);
         reflectedRay.Time = ray.Time;
         shadingColor += material.ReflectivityAttenuation * RayTrace(reflectedRay, recursion + 1);
@@ -170,7 +170,7 @@ namespace Renderer
       return shadingColor;
     }
 
-    private static Vector GetReflectionDirection(Ray ray, Vector normal)
+    protected virtual Vector GetReflectionDirection(Ray ray, Vector normal, Material material)
     {
       var reflectionDirection = (ray.Direction - normal * (Vector.Dot3(ray.Direction, normal) * 2)).Normalize3();
       return reflectionDirection;
