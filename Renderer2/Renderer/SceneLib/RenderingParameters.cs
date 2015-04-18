@@ -28,7 +28,7 @@ namespace SceneLib
       ScenePath = "Scenes/cornellBox.xml";
       ImageWidth = 256;
       ImageHeight = 256;
-      NumberOfRecursiveRays = 3;
+      NumberOfRecursiveRays = 6;
       NumberOfSamplesPerPixel = 1;
     }
 

@@ -19,13 +19,13 @@ namespace Renderer
 
     public TriangleBase CreateTriangle()
     {
-      return new Triangle(_textureSamplerFactory.CreateNearestNeighbourSampler());
+      return new Triangle(_textureSamplerFactory.CreateBilinearSampler());
     }
 
     public SphereBase CreateSphere()
     {
       var mesh = CreateMesh(string.Empty, SphereMeshPath);
-      return new Sphere(mesh, _textureSamplerFactory.CreateNearestNeighbourSampler());
+      return new Sphere(mesh, _textureSamplerFactory.CreateBilinearSampler());
     }
 
     public MeshBase CreateMesh(string name, string filePath)

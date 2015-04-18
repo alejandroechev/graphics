@@ -236,6 +236,9 @@
     <Content Include="Scenes\cornellBox.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scenes\refraction.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scenes\glossy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
