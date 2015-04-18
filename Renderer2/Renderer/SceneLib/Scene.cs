@@ -248,7 +248,10 @@ namespace SceneLib
       var lightObj = new Light();
       lightObj.Position = XMLHelper.LoadXYZ(lightNode.Elements("position").First());
       lightObj.Color = XMLHelper.LoadColor(lightNode.Elements("color").First());
-      lightObj.Size = XMLHelper.LoadFloat(lightNode.Elements("position").First(), "size");
+      if (lightNode.Elements("width").Any())
+        lightObj.Width = XMLHelper.LoadXYZ(lightNode.Elements("width").First());
+      if (lightNode.Elements("height").Any())
+        lightObj.Height = XMLHelper.LoadXYZ(lightNode.Elements("height").First());
       _lights.Add(lightObj);
     }
 
@@ -258,10 +261,11 @@ namespace SceneLib
       camera.FieldOfView = XMLHelper.LoadFloat(xmlCamera, "fieldOfView");
       camera.NearClip = XMLHelper.LoadFloat(xmlCamera, "nearClip");
       camera.FarClip = XMLHelper.LoadFloat(xmlCamera, "farClip");
-      camera.LensSize = XMLHelper.LoadFloat(xmlCamera, "lensSize");
       camera.Position = XMLHelper.LoadXYZ(xmlCamera.Elements("position").First());
       camera.Target = XMLHelper.LoadXYZ(xmlCamera.Elements("target").First());
       camera.Up = XMLHelper.LoadXYZ(xmlCamera.Elements("up").First());
+      camera.LensSize = XMLHelper.LoadFloat(xmlCamera, "lensSize");
+      camera.ExposureTime = XMLHelper.LoadFloat(xmlCamera, "exposureTime");
       _cameras.Add(camera);
     }
 

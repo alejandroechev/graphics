@@ -11,7 +11,7 @@
 
   <!-- Cameras Description -->
   <camera_list>
-    <camera fieldOfView="39.31" nearClip="1" farClip="2500.0" lensSize="0">
+    <camera fieldOfView="39.31" nearClip="1" farClip="2500.0" lensSize="0" exposureTime="1">
       <position x="278.0" y="847.0" z="279.0"/>
       <target x="278.0" y="0.0" z="279.0"/>
       <up x="1.0" y="0.0" z="0.0"/>
@@ -24,9 +24,6 @@
     <light>
       <color red="0.8" green="0.7" blue="0.6"/>
       <position x="278.0" y="547.8" z="279.5" size="0.0"/>
-      <attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
-      <width x="100" y="0" z="0"/>
-      <height x="0" y="0" z="100"/>
     </light>
   </light_list>
 

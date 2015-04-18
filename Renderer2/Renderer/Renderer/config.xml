@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
-  <window width="512" height="512"/>
-  <scene path ="Scenes/cornellBox - full reflection.xml"/>
-
+  <window width="256" height="256"/>
+  <scene path ="Scenes/motionblur.xml"/>
+  <parameters samplesPerPixel="9"/>
 </config>

@@ -21,6 +21,7 @@ namespace SceneLib
     public int ImageWidth { get; set; }
     public int ImageHeight { get; set; }
     public int NumberOfRecursiveRays { get; set; }
+    public int NumberOfSamplesPerPixel { get; set; }
     
     private RenderingParameters()
     {
@@ -28,6 +29,7 @@ namespace SceneLib
       ImageWidth = 256;
       ImageHeight = 256;
       NumberOfRecursiveRays = 3;
+      NumberOfSamplesPerPixel = 1;
     }
 
     public void Load()
@@ -41,6 +43,8 @@ namespace SceneLib
       ScenePath = XMLHelper.LoadString(xmlConfig.Elements("scene").First(), "path");
       ImageWidth = XMLHelper.LoadInt(xmlConfig.Elements("window").First(), "width");
       ImageHeight = XMLHelper.LoadInt(xmlConfig.Elements("window").First(), "height");
+      if (xmlConfig.Elements("parameters").Any())
+        NumberOfSamplesPerPixel = XMLHelper.LoadInt(xmlConfig.Elements("parameters").First(), "samplesPerPixel");
 
     }
 

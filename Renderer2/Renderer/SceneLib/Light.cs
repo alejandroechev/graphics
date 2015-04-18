@@ -7,11 +7,13 @@
   {
     public Vector Color { get; set; }
     public Vector Position { get; set; }
-    public float Size { get; set; }
+    public Vector Width { get; set; }
+    public Vector Height { get; set; }
     
     public Light()
     {
-    
+      Width = new Vector();
+      Height = new Vector();
     }
 
   }

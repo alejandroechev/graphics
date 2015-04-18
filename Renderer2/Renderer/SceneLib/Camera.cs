@@ -12,8 +12,9 @@ namespace SceneLib
     public float NearClip { get; set; }
     public float FarClip { get; set; }
     public float LensSize { get; set; }
+    public float ExposureTime { get; set; }
 
-    public void MoveForward(float delta)
+  public void MoveForward(float delta)
     {
       Vector direction = Target - Position;
       direction = direction.Normalize3();

@@ -34,10 +34,10 @@ namespace Renderer
 
     protected override Vector GetLightPosition(Light light)
     {
-      var randomX = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
-      var randomY = (float)(2.0f * (_randomizer.NextDouble() - 0.5));
-      var newLightPosition = light.Position +
-             new Vector(randomX * light.Size, 0, randomY * light.Size);
+      var randomX = (float)((_randomizer.NextDouble() - 0.5));
+      var randomY = (float)((_randomizer.NextDouble() - 0.5));
+      var newLightPosition = light.Position + randomX*light.Width + randomY*light.Height;
+             
       return newLightPosition;
     }
 
@@ -100,7 +100,7 @@ namespace Renderer
       if (!_isParallel)
       {
         float time = 0.0f;
-        float deltaTime = 1.0f / _numberOfSamplesPerPixel;
+        float deltaTime = _scene.Camera.ExposureTime / _numberOfSamplesPerPixel;
         for (int i = 0; i < gridSize; i++)
         {
           var gridX = initialGridX + (i + 1) * deltaSize + deltaSize * (float)(_randomizer.NextDouble() - 1);

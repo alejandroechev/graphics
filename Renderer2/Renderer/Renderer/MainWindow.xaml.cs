@@ -132,7 +132,7 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Raytracer(_scene, this));
-      _renderers.Add(new DistributionRaytracer(_scene, this, 10000));
+      _renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
       UpdateRenderer();
     }
 
