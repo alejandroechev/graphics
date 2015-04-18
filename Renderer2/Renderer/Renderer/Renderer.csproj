@@ -221,6 +221,9 @@
     <Resource Include="Scenes\cornellBox - multilight - Copy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Scenes\cornellBox - full reflection.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scenes\cornellBox - textureAliasing2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -241,6 +244,7 @@
     </Content>
     <Content Include="Scenes\depthoffield.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Scenes\motionblur.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

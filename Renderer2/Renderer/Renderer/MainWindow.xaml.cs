@@ -123,8 +123,8 @@ namespace Renderer
 
       Width = _scene.Width * 1.5;
       Height = _scene.Height * 1.5;
-      //Display.Width = _scene.Width;
-      //Display.Height = _scene.Height;
+      Display.Width = _scene.Width;
+      Display.Height = _scene.Height;
 
       _width = _scene.Width;
       _height = _scene.Height;

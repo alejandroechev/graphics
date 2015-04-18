@@ -185,8 +185,8 @@ void init()
   spheres[2] = Sphere(vec3(275, 275, -30550), 30000, 2); //Back wall
   spheres[3] = Sphere(vec3(275, 30550, -275), 30000, 2); //Ceiling
   spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
-  spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 3); //Left wall
-  spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 4); //Right wall
+  spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 4); //Right wall
+  spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 3); //Left wall
 
 }
 
