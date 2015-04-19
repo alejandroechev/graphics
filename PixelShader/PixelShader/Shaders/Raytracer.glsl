@@ -44,7 +44,7 @@ struct Scene {
   vec4 background;
 };
 
-const int numberOfSpheres = 7;
+const int numberOfSpheres = 8;
 const int numLights = 2;
 const int numberOfMaterials = 5;
 const int maxNumberOfReflections = 4;
@@ -187,6 +187,7 @@ void init()
   spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
   spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 4); //Right wall
   spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 3); //Left wall
+  spheres[7] = Sphere(vec3(275, 400, -275), 20, 2); //White sphere
 
 }
 
@@ -200,6 +201,9 @@ void main(void)
 
   spheres[0].position = vec3(275,120,-275) + 150 * vec3(sin(time),0,cos(time));
   spheres[1].position = vec3(275,100,-275) + 120 * vec3(sin(time + 10),0,cos(time+ 10));
+
+  spheres[7].position = vec3(275, 400, -275) + 100 * vec3(0, sin(time), 0);
+  //lights[1].position = spheres[7].position;
  
   //Ray definition
   vec3 pixel = vec3(resolution.x * pixelCoords.x, resolution.y * pixelCoords.y, 0);
