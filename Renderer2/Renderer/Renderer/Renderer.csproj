@@ -227,7 +227,7 @@
     <Content Include="Scenes\cornellBox - textureAliasing2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scenes\cornellBox - textureAliasing.xml">
+    <Content Include="Scenes\bilinear.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scenes\cornellBox - multilight.xml">
