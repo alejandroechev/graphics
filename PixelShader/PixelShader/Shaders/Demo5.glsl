@@ -6,10 +6,7 @@ precision highp float;
 in vec2 pixelCoords;
 out vec4 pixelColor;
 
-
-uniform vec2 mouse;
 uniform float time;
-
 
 struct Circle {
   vec2 position;

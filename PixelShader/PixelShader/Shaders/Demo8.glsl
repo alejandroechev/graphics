@@ -56,7 +56,6 @@ void main(void)
 	size = size * randVal;
 
 	circles[i] = Circle(pos, size, color, vec2(0,0));  
-    circles[i].position= circles[i].position + circles[i].velocity * time;
     if(testCircle(circles[i], pixelCoords))
       pixelColor = (0.5 + 0.5*cos(time)) * circles[i].color;
   }

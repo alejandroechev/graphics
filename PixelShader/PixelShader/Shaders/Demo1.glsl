@@ -6,11 +6,7 @@ precision highp float;
 in vec2 pixelCoords;
 out vec4 pixelColor;
 
-
-uniform vec2 mouse;
-uniform float time;
-
 void main(void)
 { 
-  pixelColor = vec4(pixelCoords.x, pixelCoords.y, 1,1)
+  pixelColor = vec4(pixelCoords, 1, 1);
 }

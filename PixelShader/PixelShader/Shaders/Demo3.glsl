@@ -6,8 +6,6 @@ precision highp float;
 in vec2 pixelCoords;
 out vec4 pixelColor;
 
-
-uniform vec2 mouse;
 uniform float time;
 
 vec2 center = vec2(0.5,0.5);
