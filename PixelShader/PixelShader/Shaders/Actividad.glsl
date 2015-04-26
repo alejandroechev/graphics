@@ -8,14 +8,29 @@ out vec4 pixelColor;
 uniform vec2 mouse;
 uniform float time;
 
-const int numberOfPartitions = 20;
+const bool showPoints = false;
+const bool animate = true;
+const int numberOfPartitions = 6;
+
+
+
+
+
+
+
+
+
 
 float rand(vec2 seed){
     return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-float randNext(float previous){
-	return rand(vec2(previous));
+vec2 rand2(vec2 seed){
+	return fract(sin(vec2(dot(seed,vec2(127.1,311.7)),dot(seed,vec2(269.5,183.3))))*43758.5453);
+}
+
+vec3 rand3(vec2 seed){
+	return fract(sin(vec3(dot(seed,vec2(123.1,314.7)),dot(seed,vec2(219.5,83.3)),dot(seed,vec2(49.5,223.3))))*43758.5453);
 }
 
 struct Circle {
@@ -37,59 +52,56 @@ void main(void)
   float distanceToClosestCircle = 100000;
   int closestCircleIndexForMouse = -1;
   float distanceToClosestCircleForMouse = 100000;
-  Circle circles[numberOfPartitions]; 
+  Circle circles[numberOfPartitions * numberOfPartitions]; 
   float randVal = 0.1;
   bool inCircle = false;
+  int index = 0;
   for(int i=0; i<numberOfPartitions; i++)
   {
-	vec4 color = vec4(0,0,0,1);
-	randVal = randNext(randVal);
-	color.r = randVal;
-	randVal = randNext(randVal);
-	color.g = randVal;
-	randVal = randNext(randVal);
-	color.b = randVal;
-	vec2 pos = vec2(0,0);
-	randVal = randNext(randVal);
-	pos.x = randVal;
-	randVal = randNext(randVal);
-	pos.y = randVal;
-	vec2 velocity = vec2(0,0);
-	randVal = randNext(randVal);
-	velocity.x = randVal/5 * cos(time);
-	randVal = randNext(randVal);
-	velocity.y = randVal/5 * cos(time);
+    for(int j=0; j<numberOfPartitions; j++)
+	{
+		vec2 seed = vec2(i+0.5,j+0.5);
+		float randValue = rand(seed);
+		vec4 color = vec4(rand3(seed),1);
+		vec2 pos = rand2(seed);
+		vec2 velocity = vec2(0,0);
+		velocity.x = randValue/5 * cos(time);
+		velocity.y = randValue/5 * sin(time);
 	
-	pos = pos + velocity;
+		if(animate)
+			pos = pos + velocity;
 
-	circles[i] = Circle(pos, 0.005, color, velocity);  
+		circles[index] = Circle(pos, 0.005, color, velocity);  
 
-	if(testCircle(circles[i], pixelCoords))
-	{
-		pixelColor = vec4(0,0,0,1);
-		inCircle = true;
-	}
+		if(testCircle(circles[index], pixelCoords) && showPoints)
+		{
+		    pixelColor = vec4(0,0,0,1);
+			inCircle = true;
+		}
 
-	float distanceToPixel = distance(pixelCoords, pos);
-	if(distanceToPixel < distanceToClosestCircle)
-	{
-		distanceToClosestCircle = distanceToPixel;
-		closestCircleIndex = i;
-	}
+		float distanceToPixel = distance(pixelCoords, pos);
+		if(distanceToPixel < distanceToClosestCircle)
+		{
+			distanceToClosestCircle = distanceToPixel;
+			closestCircleIndex = index;
+		}
 
-	float distanceToMouse = distance(mouse, pos);
-	if(distanceToMouse < distanceToClosestCircleForMouse)
-	{
-		distanceToClosestCircleForMouse = distanceToMouse;
-		closestCircleIndexForMouse = i;
+		float distanceToMouse = distance(mouse, pos);
+		if(distanceToMouse < distanceToClosestCircleForMouse)
+		{
+			distanceToClosestCircleForMouse = distanceToMouse;
+			closestCircleIndexForMouse = index;
+		}
+		index++;
 	}
   }
 
   if(!inCircle)
   {
+    vec4 color = circles[closestCircleIndex].color;
     if(closestCircleIndex == closestCircleIndexForMouse)
 		pixelColor = vec4(0,0,0,1);
 	else
-		pixelColor = circles[closestCircleIndex].color;
+		pixelColor = color;
   }
 }
