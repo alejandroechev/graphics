@@ -8,9 +8,9 @@ out vec4 pixelColor;
 uniform vec2 mouse;
 uniform float time;
 
-const bool showPoints = false;
+const bool showPoints = true;
 const bool animate = true;
-const int numberOfPartitions = 6;
+const int numberOfPartitions = 10;
 
 
 

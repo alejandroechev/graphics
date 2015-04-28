@@ -13,16 +13,17 @@ struct Circle {
   float radius;
   vec4 color;
 };
-
+  
 bool testCircle(Circle c, vec2 pixelCoords)
 {
   return distance(c.position,pixelCoords) < c.radius;
 }
 
 void main(void)
-{ 
+{
+  Circle c1 = Circle(vec2(0.5,0.5), 0.1 * sin(time), vec4(1,0,0,1))
+ 
   pixelColor = vec4(pixelCoords, 0.5 + 0.5*cos(time),1);  
-  Circle c1 = Circle(vec2(0.5,0.5), 0.1, vec4(1,0,0,1));
   if(testCircle(c1, pixelCoords))
     pixelColor = (0.5 + 0.5*cos(time)) * c1.color;
 }

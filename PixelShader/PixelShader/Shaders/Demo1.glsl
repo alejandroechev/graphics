@@ -8,5 +8,5 @@ out vec4 pixelColor;
 
 void main(void)
 { 
-  pixelColor = vec4(pixelCoords, 1, 1);
+  pixelColor = vec4(1, pixelCoords.x, pixelCoords.y, 1);
 }
