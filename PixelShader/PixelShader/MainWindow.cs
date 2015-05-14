@@ -16,7 +16,7 @@ namespace PixelShader
     public static float FrameRate = 60;
 
 
-    private const string PixelShaderFilePath = @"Shaders\Raytracer.glsl";
+    private const string PixelShaderFilePath = @"Shaders\RaytracerTarea2.glsl";
     private string _pixelShaderSource;
     private const string VertexShaderSource = @"
       #version 130

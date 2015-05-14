@@ -11,9 +11,9 @@
 
   <!-- Cameras Description -->
   <camera_list>
-    <camera fieldOfView="39.31" nearClip="1100" farClip="2500.0">
-      <position x="278.0" y="273.0" z="-800.0"/>
-      <target x="278.0" y="273.0" z="-700.0"/>
+    <camera fieldOfView="39.31" nearClip="1" farClip="2500.0">
+      <position x="130.0" y="100.0" z="250.0"/>
+      <target x="130.0" y="100.0" z="350.0"/>
       <up x="0.0" y="1.0" z="0.0"/>
     </camera>
   </camera_list>
@@ -23,18 +23,8 @@
     <!-- Light Description, Color & Position -->
     <light>
       <color red="0.8" green="0.7" blue="0.6"/>
-      <position x="278.0" y="527.8" z="279.5" size="0"/>
+      <position x="278.0" y="540.8" z="-279.5"/>
     </light>
-
-    <!--<light>
-      <color red="0.8" green="0.7" blue="0.6"/>
-      <position x="0.5" y="275.8" z="275.5" size="50"/>
-    </light>-->
-
-    <!--<light>
-      <color red="0.8" green="0.7" blue="0.6"/>
-      <position x="0.5" y="0.5" z="0.5" size="50"/>
-    </light>-->
   </light_list>
 
   <!-- Material Type Collection -->
@@ -48,13 +38,11 @@
     <material name="Green">
       <diffuse red="0.156" green="0.426" blue="0.107"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
-      <reflective attenuation="0.5"/>
     </material>
 
     <material name="Red">
       <diffuse red="0.639" green="0.06" blue="0.062"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
-      <reflective attenuation="0.5"/>
     </material>
 
     <material name="YellowMirror">
@@ -81,9 +69,9 @@
     </material>
 
     <material name="Dielectric">
-      <diffuse red="0.739" green="0.025" blue="0.765"/>
+      <diffuse red="0.739" green="0.725" blue="0.765"/>
       <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
-      <refractive index="1.03" attenuation="0.5"/>
+      <refractive index="1.05" attenuation="0.5"/>
     </material>
 
     <material name="Earth">
@@ -107,21 +95,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="White">
+      <vertex index="0" material="Grid">
         <position x="552.8" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="White">
+      <vertex index="1" material="Grid">
         <position x="0.0" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="2" material="White">
+      <vertex index="2" material="Grid">
         <position x="0.0" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
@@ -134,21 +122,21 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="White">
+      <vertex index="0" material="Grid">
         <position x="552.8" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="White">
+      <vertex index="1" material="Grid">
         <position x="549.6" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="1.0"/>
       </vertex>
 
 
-      <vertex index="2" material="White">
+      <vertex index="2" material="Grid">
         <position x="0.0" y="0.0" z="559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
@@ -377,14 +365,6 @@
       <rotation x="0.0" y="0.0" z="0.0"/>
       <position x="0.0" y="0.0" z="0.0"/>
       <center x="130.0" y="100.0" z="130.0"/>
-      <velocity x="-30.0" y="0.0" z="0.0"/>
-    </sphere>
-
-    <sphere name="Sphere3" material="Dielectric" radius="80.0">
-      <scale x="1.0" y="1.0" z="1.0"/>
-      <rotation x="0.0" y="0.0" z="0.0"/>
-      <position x="0.0" y="0.0" z="0.0"/>
-      <center x="250.0" y="120.0" z="0.0"/>
     </sphere>
 
   </object_list>

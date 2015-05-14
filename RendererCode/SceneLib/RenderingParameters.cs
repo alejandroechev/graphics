@@ -50,15 +50,15 @@ namespace SceneLib
       EnableShadows = false;
       EnableReflections = true;
       EnableRefractions = true;
-      NumberOfRecursiveRays = 6;
+      NumberOfRecursiveRays = 10;
       EnableTextureMapping = true;
       MinimumTime = 0;
       MaximumTime = 0;
       FocalDistance = 0;
       LensSize = 0;
       EnableShading = true;
-      EnableSpecular = false;
-      EnableAmbient = false;
+      EnableSpecular = true;
+      EnableAmbient = true;
     }
 
     public void Load()

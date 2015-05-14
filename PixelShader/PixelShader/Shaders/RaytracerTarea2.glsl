@@ -7,7 +7,6 @@ out vec4 pixelColor;
 
 const float infinity = 1. / 0.;
 
-vec2 resolution = vec2(512,512);
 uniform vec2 mouse;
 uniform float time;
 
@@ -47,13 +46,12 @@ struct Scene {
 const int numberOfSpheres = 8;
 const int numLights = 2;
 const int numberOfMaterials = 5;
-const int maxNumberOfReflections = 4;
-const int numberOfRaysPerPixelRoot = 1;
+const int maxNumberOfReflections = 3;
 
 Sphere spheres[numberOfSpheres];
 Material materials[numberOfMaterials];
 Light lights[numLights];
-Camera camera = Camera(vec3(278, 273, 800));
+Camera camera = Camera(vec3(0.5, 0.5, 1.5));
 Scene scene = Scene(vec4(0.1,0.1,0.1,1), vec4(0,0,0,1));
 
 
@@ -132,7 +130,7 @@ vec4 rayTrace(Ray ray)
 {
   vec4 accumulatedColor = vec4(0,0,0,1);
   float frac = 1.0;
-  for(int i=0; i < maxNumberOfReflections; i++)
+  for(int i=0; i < maxNumberOfReflections + 1; i++)
   {
 	  float tMin = infinity;
 	  int sphereMin = -1;
@@ -178,18 +176,18 @@ void init()
   materials[3] = Material(vec4(0.639, 0.06, 0.062, 1), vec4(0,0,0,1), 1, 0.5);   // Red
   materials[4] = Material(vec4(0.156, 0.426, 0.107, 1), vec4(0,0,0,1), 1, 0.5);  // Green
 
-  lights[0] = Light(vec3(0.5,1.0,0.5),  vec4(0.8,0.7,0.6,1));
-  lights[1] = Light(vec3(275,540,-275),  vec4(0.2,0.2,0.2,1));
+  lights[0] = Light(vec3(0.5,0.99,0.5),  vec4(0.8,0.7,0.6,1));
+  lights[1] = Light(vec3(0.5,0.99,-0.5),  vec4(0.2,0.2,0.2,1));
 
-  spheres[0] = Sphere(vec3(180, 120, -370), 120, 0); //Blue sphere
-  spheres[1] = Sphere(vec3(420, 100, -130), 100, 1); //Yellow sphere
-  spheres[2] = Sphere(vec3(275, 275, -30550), 30000, 2); //Back wall
-  spheres[3] = Sphere(vec3(275, 30550, -275), 30000, 2); //Ceiling
-  spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
-  spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 4); //Right wall
-  spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 3); //Left wall
-  spheres[7] = Sphere(vec3(275, 400, -275), 20, 2); //White sphere
-
+  spheres[0] = Sphere(vec3(0.35, 0.24, -0.72), 0.2, 0); //Blue sphere
+  spheres[1] = Sphere(vec3(0.82, 0.2, -0.25), 0.19, 1); //Yellow sphere
+  spheres[2] = Sphere(vec3(0.5, 0.5, -1001), 1000, 2); //Back wall
+  spheres[3] = Sphere(vec3(0.5, 1001.1, -0.5), 1000, 2); //Ceiling
+  spheres[4] = Sphere(vec3(0.5, -1000.1, -0.5), 1000, 2); //Floor
+  spheres[5] = Sphere(vec3(1001.1, 0.5, -0.5), 1000, 4); //Right wall
+  spheres[6] = Sphere(vec3(-1000, 0.5, -0.5), 999.9, 3); //Left wall
+  spheres[7] = Sphere(vec3(0.5, 0.7, -0.5), 0.03, 2); //White sphere
+  
 }
 
 void main(void)
@@ -197,35 +195,17 @@ void main(void)
   //Initialize elements
   init();
 
-  //Interactivity and real time stuff 
-  lights[0].position = vec3(resolution.x * mouse.x, resolution.y * mouse.y, 0.0); 
-
-  
-  //lights[1].position = spheres[7].position;
- 
-  vec3 color = vec3(0,0,0);
-  float delta = 1.0 / (numberOfRaysPerPixelRoot + 1);
-  float rayTime = 0.0;
-  float exposureTime = 0.3;
-  float deltaTime = exposureTime / (numberOfRaysPerPixelRoot * numberOfRaysPerPixelRoot);
-  float speed = 2;
-  for(int i=0; i<numberOfRaysPerPixelRoot; i++)
-  {
-	for(int j=0; j<numberOfRaysPerPixelRoot; j++)
-	{ 
-		  //Ray definition
-		  vec3 pixel = vec3(resolution.x * (pixelCoords.x) + i*delta, resolution.y * (pixelCoords.y) + j*delta, 0);
-		  Ray ray = Ray(camera.position, normalize(pixel - camera.position));
+  //Light movement 
+  lights[0].position = vec3(mouse.x, mouse.y, 0.0); 
 		  		  
-		  spheres[0].position = vec3(275,120,-275) + 150 * vec3(sin(speed*(time + rayTime)),0,cos(speed*(time + rayTime)));
-		  spheres[1].position = vec3(275,100,-275) + 120 * vec3(sin(speed*(time + rayTime) + 10),0,cos(speed*(time + rayTime)+ 10));
-
-		  spheres[7].position = vec3(275, 400, -275) + 100 * vec3(0, sin(speed*(time + rayTime)), 0);
+  //Object movement
+  float speed = 1;
+  spheres[0].position = vec3(0.5, 0.24, -0.5) + 0.3 * vec3(sin(speed*(time)),0,cos(speed*(time)));
+  spheres[1].position = vec3(0.5, 0.2, -0.5) + 0.23 * vec3(sin(speed*(time) + 10),0,cos(speed*(time)+ 10));
+  spheres[7].position = vec3(0.5, 0.7, -0.5) + 0.2 * vec3(0, sin(speed*(time)), 0);
 		   	
-		  //Raytrace objects
-		  color += rayTrace(ray).rgb;
-		  rayTime += deltaTime;
-	}
-  }  
-  pixelColor = vec4(color/(numberOfRaysPerPixelRoot*numberOfRaysPerPixelRoot),1);
+  //Raytrace objects
+  vec3 pixel = vec3(pixelCoords, 0);
+  Ray ray = Ray(camera.position, normalize(pixel - camera.position));
+  pixelColor = rayTrace(ray);
 }

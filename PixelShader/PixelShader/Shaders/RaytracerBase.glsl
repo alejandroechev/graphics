@@ -7,6 +7,7 @@ out vec4 pixelColor;
 
 const float infinity = 1. / 0.;
 const vec2 resolution = vec2(512,512);
+const float speed = 0;
 
 uniform vec2 mouse;
 uniform float time;
@@ -178,7 +179,7 @@ void main(void)
   float rayTime = 0.0;
   float exposureTime = 0.2;
   float deltaTime = exposureTime / (numberOfRaysPerPixelRoot * numberOfRaysPerPixelRoot);
-  float speed = 3;
+  
   for(int i=0; i<numberOfRaysPerPixelRoot; i++)
   {
 	for(int j=0; j<numberOfRaysPerPixelRoot; j++)

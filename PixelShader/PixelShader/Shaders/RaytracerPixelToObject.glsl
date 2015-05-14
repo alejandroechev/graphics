@@ -44,8 +44,8 @@ struct Scene {
   vec4 background;
 };
 
-const int numberOfSpheres = 8;
-const int numLights = 2;
+const int numberOfSpheres = 2;
+const int numLights = 1;
 const int numberOfMaterials = 5;
 const int maxNumberOfReflections = 4;
 const int numberOfRaysPerPixelRoot = 1;
@@ -54,7 +54,7 @@ Sphere spheres[numberOfSpheres];
 Material materials[numberOfMaterials];
 Light lights[numLights];
 Camera camera = Camera(vec3(278, 273, 800));
-Scene scene = Scene(vec4(0.1,0.1,0.1,1), vec4(0,0,0,1));
+Scene scene = Scene(vec4(0.1,0.1,0.1,1), vec4(1,1,1,1));
 
 
 //ray-sphere intersection
@@ -107,6 +107,7 @@ bool isInOtherSphereShadow(vec3 p, Sphere thisSphere, Light light)
 vec4 blinnPhongShading(vec3 p, vec3 n, Sphere sphere)
 {
   Material material	= materials[sphere.materialIndex];
+  return material.diffuse;
   vec3 v = camera.position - p;
   v = normalize(v);
  
@@ -114,8 +115,8 @@ vec4 blinnPhongShading(vec3 p, vec3 n, Sphere sphere)
   for(int i=0; i<numLights; i++)
   {
 	vec4 lightColor = lights[i].color;
-	if(isInOtherSphereShadow(p, sphere, lights[i]))
-		lightColor = vec4(0,0,0,1);
+	//if(isInOtherSphereShadow(p, sphere, lights[i]))
+	//	lightColor = vec4(0,0,0,1);
     vec3 l = lights[i].position - p;
     l = normalize(l);  
     vec3 h = v + l;
@@ -172,23 +173,22 @@ vec4 rayTrace(Ray ray)
 
 void init()
 { 
-  materials[0] = Material(vec4(0.156,0.126,0.507,1), vec4(1,1,1,1), 100, 0.3);   // Blue specular
-  materials[1] = Material(vec4(0.656,0.626,0.107,1), vec4(0,0,0,1), 1, 0.5);     // Yellow
-  materials[2] = Material(vec4(0.739, 0.725, 0.765, 1), vec4(0,0,0,1), 1, 0.5);  // White
-  materials[3] = Material(vec4(0.639, 0.06, 0.062, 1), vec4(0,0,0,1), 1, 0.5);   // Red
-  materials[4] = Material(vec4(0.156, 0.426, 0.107, 1), vec4(0,0,0,1), 1, 0.5);  // Green
+  materials[0] = Material(vec4(0.156,0.126,0.507,1), vec4(1,1,1,1), 100, 0);   // Blue specular
+  materials[1] = Material(vec4(0.656,0.626,0.107,1), vec4(0,0,0,1), 1, 0);     // Yellow
+  materials[2] = Material(vec4(0.739, 0.725, 0.765, 1), vec4(0,0,0,1), 1, 0);  // White
+  materials[3] = Material(vec4(0.639, 0.06, 0.062, 1), vec4(0,0,0,1), 1, 0);   // Red
+  materials[4] = Material(vec4(0.156, 0.426, 0.107, 1), vec4(0,0,0,1), 1, 0);  // Green
 
-  lights[0] = Light(vec3(0.5,1.0,0.5),  vec4(0.8,0.7,0.6,1));
-  lights[1] = Light(vec3(275,540,-275),  vec4(0.2,0.2,0.2,1));
+  lights[0] = Light(vec3(275,540,-275),  vec4(0.8,0.7,0.6,1));
+  //lights[1] = Light(vec3(275,540,-275),  vec4(0.2,0.2,0.2,1));
 
   spheres[0] = Sphere(vec3(180, 120, -370), 120, 0); //Blue sphere
-  spheres[1] = Sphere(vec3(420, 100, -130), 100, 1); //Yellow sphere
-  spheres[2] = Sphere(vec3(275, 275, -30550), 30000, 2); //Back wall
-  spheres[3] = Sphere(vec3(275, 30550, -275), 30000, 2); //Ceiling
-  spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
-  spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 4); //Right wall
-  spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 3); //Left wall
-  spheres[7] = Sphere(vec3(275, 400, -275), 20, 2); //White sphere
+  spheres[1] = Sphere(vec3(320, 100, -130), 100, 1); //Yellow sphere
+  //spheres[2] = Sphere(vec3(275, 275, -30550), 30000, 2); //Back wall
+  //spheres[3] = Sphere(vec3(275, 30550, -275), 30000, 2); //Ceiling
+  //spheres[4] = Sphere(vec3(275, -30000, -275), 30000, 2); //Floor
+  //spheres[5] = Sphere(vec3(30550, 275, -275), 30000, 4); //Right wall
+  //spheres[6] = Sphere(vec3(-30000, 275, -275), 30000, 3); //Left wall
 
 }
 
@@ -198,7 +198,7 @@ void main(void)
   init();
 
   //Interactivity and real time stuff 
-  lights[0].position = vec3(resolution.x * mouse.x, resolution.y * mouse.y, 0.0); 
+  //lights[0].position = vec3(resolution.x * mouse.x, resolution.y * mouse.y, 0.0); 
 
   
   //lights[1].position = spheres[7].position;
@@ -217,10 +217,10 @@ void main(void)
 		  vec3 pixel = vec3(resolution.x * (pixelCoords.x) + i*delta, resolution.y * (pixelCoords.y) + j*delta, 0);
 		  Ray ray = Ray(camera.position, normalize(pixel - camera.position));
 		  		  
-		  spheres[0].position = vec3(275,120,-275) + 150 * vec3(sin(speed*(time + rayTime)),0,cos(speed*(time + rayTime)));
-		  spheres[1].position = vec3(275,100,-275) + 120 * vec3(sin(speed*(time + rayTime) + 10),0,cos(speed*(time + rayTime)+ 10));
+		  //spheres[0].position = vec3(275,120,-275) + 150 * vec3(sin(speed*(time + rayTime)),0,cos(speed*(time + rayTime)));
+		  //spheres[1].position = vec3(275,100,-275) + 120 * vec3(sin(speed*(time + rayTime) + 10),0,cos(speed*(time + rayTime)+ 10));
 
-		  spheres[7].position = vec3(275, 400, -275) + 100 * vec3(0, sin(speed*(time + rayTime)), 0);
+		  //spheres[7].position = vec3(275, 400, -275) + 100 * vec3(0, sin(speed*(time + rayTime)), 0);
 		   	
 		  //Raytrace objects
 		  color += rayTrace(ray).rgb;
