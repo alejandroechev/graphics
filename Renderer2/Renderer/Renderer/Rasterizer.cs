@@ -5,11 +5,20 @@ using SceneLib;
 
 namespace Renderer
 {
+  public class WireFrameRasterizer : Rasterizer
+  {
+    public WireFrameRasterizer(Scene scene, IDisplay display)
+      : base(scene, display)
+    {
+      _isWireframe = true;
+    }
+  }
+
   public class Rasterizer : AbstractRenderer
   {
     class VertexOut
     {
-      public Triangle Triangle { get; set; }
+      public TriangleBase Triangle { get; set; }
       public Vector Color { get; set; }
       public Vector WorldPosition { get; set; }
       public Vector PositionHomogeneous { get; set; }
@@ -31,7 +40,7 @@ namespace Renderer
     }
 
     private readonly float[,] _zBuffer;
-    private bool _isWireframe = false;
+    protected bool _isWireframe = false;
 
     public Rasterizer(Scene scene, IDisplay display)
       : base(scene, display)
@@ -41,6 +50,8 @@ namespace Renderer
 
     public override void Render()
     {
+      var start = DateTime.Now.Ticks;
+      
       ClearBuffers();
       var meshes = _scene.Objects.Where(o => o is IHaveTriangles).Cast<IHaveTriangles>().ToList();
       var triangles = new List<Triangle>();
@@ -49,16 +60,33 @@ namespace Renderer
       var triangleMatricesDict = new Dictionary<TriangleBase, Matrix>();
       meshes.ForEach(m => m.Triangles.ForEach(t => triangleMatricesDict.Add(t, objectToWorldMatrices[m])));
       meshes.ForEach(m => triangles.AddRange(m.Triangles.Cast<Triangle>().ToList()));
+
+      Console.WriteLine("Preprocess: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
+
       var projection = PerspectiveProjection();
       var view = WorldToCamera();
       var worldToClipping = projection * view;
       var viewPort = ViewPort();
-      var vertices = new List<VertexOut>();
-      triangles.ForEach(t => vertices.AddRange(t.Vertices.Select(v => ProcessVertex(v, t, viewPort, worldToClipping, triangleMatricesDict[t]))));
+
+      Console.WriteLine("Viewing matrices: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
+
+      var originalVertices = new List<Vertex>();
+      triangles.ForEach(t => originalVertices.AddRange(t.Vertices));
+      var vertices =
+        originalVertices
+          .Select(v => ProcessVertex(v, v.ParentTriangle, viewPort, worldToClipping, triangleMatricesDict[v.ParentTriangle])).ToList();
+
+      Console.WriteLine("Vertex processing: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
+      
       var fragments = new List<Fragment>();
       var triangleGroups = vertices.GroupBy(v => v.Triangle, v => v, (key, g) => g.ToList()).ToList();
       triangleGroups.ForEach(g => fragments.AddRange(Rasterize(g)));
+
+      Console.WriteLine("Rasterization: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
+
       fragments.ForEach(ProcessFragment);
+
+      Console.WriteLine("Frag processing: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
     }
 
     private void ClearBuffers()
@@ -78,16 +106,16 @@ namespace Renderer
       if (fragment.Position.X < 0 || fragment.Position.X > _scene.Width - 1 || fragment.Position.Y < 0 ||
           fragment.Position.Y > _scene.Height - 1)
         return;
-      if (fragment.Z > _zBuffer[(int) fragment.Position.X, (int) fragment.Position.Y])
+      if (fragment.Z > _zBuffer[(int)fragment.Position.X, (int)fragment.Position.Y])
       {
-        _zBuffer[(int) fragment.Position.X, (int) fragment.Position.Y] = fragment.Z;
-        _display.SetPixel((int) fragment.Position.X, (int) fragment.Position.Y, fragment.Color.R, fragment.Color.G,
+        _zBuffer[(int)fragment.Position.X, (int)fragment.Position.Y] = fragment.Z;
+        _display.SetPixel((int)fragment.Position.X, (int)fragment.Position.Y, fragment.Color.R, fragment.Color.G,
           fragment.Color.B);
       }
 
     }
 
-    private VertexOut ProcessVertex(Vertex vertex, Triangle triangle, Matrix viewPort, Matrix worldToClipping, Matrix objectToWorldTransform)
+    private VertexOut ProcessVertex(Vertex vertex, TriangleBase triangle, Matrix viewPort, Matrix worldToClipping, Matrix objectToWorldTransform)
     {
       var vertexOut = new VertexOut();
       vertexOut.Triangle = triangle;

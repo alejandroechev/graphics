@@ -41,7 +41,6 @@ namespace Renderer
           _display.SetPixel(i, j, color.R, color.G, color.B);
         });
       }
-      _display.UpdateDisplay();
     }
 
     protected virtual Vector GetSampleColor(float screenX, float screenY)

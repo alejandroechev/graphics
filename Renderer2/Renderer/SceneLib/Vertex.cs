@@ -7,6 +7,8 @@
     public Vector TextureCoordinates { get; set; }
     public Material Material { get; set; }
 
+    public TriangleBase ParentTriangle { get; set; }
+
     public Vertex()
     {
       TextureCoordinates = new Vector();

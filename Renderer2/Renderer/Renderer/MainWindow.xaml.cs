@@ -30,6 +30,7 @@ namespace Renderer
     private DateTime _initialTime;
 
     private readonly TextureSamplerFactory _textureSamplerFactory = new TextureSamplerFactory();
+    private bool _isAsync = false;
 
     public MainWindow()
     {
@@ -44,33 +45,34 @@ namespace Renderer
       if (e.Key == Key.R)
       {
         _currentRendererIndex = (_currentRendererIndex + 1) % _renderers.Count;
-        UpdateRenderer();
+        RendererName.Text = _renderers[_currentRendererIndex].Name;
+        UpdateRendererAsync();
       }
       if (e.Key == Key.W)
       {
         _scene.Camera.MoveForward(deltaCamera);
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.S)
       {
         _scene.Camera.MoveForward(-deltaCamera);
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.A)
       {
         _scene.Camera.MoveSideways(-deltaCamera);
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
 
       if (e.Key == Key.D)
       {
         _scene.Camera.MoveSideways(deltaCamera);
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.P)
       {
         _renderers[_currentRendererIndex].IsParallel = !_renderers[_currentRendererIndex].IsParallel;
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.B)
       {
@@ -79,7 +81,7 @@ namespace Renderer
           if (renderObject is IHaveTextureSampler)
             (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateBilinearSampler();
         }
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.N)
       {
@@ -88,7 +90,7 @@ namespace Renderer
           if (renderObject is IHaveTextureSampler)
             (renderObject as IHaveTextureSampler).TextureSampler = _textureSamplerFactory.CreateNearestNeighbourSampler();
         }
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.G)
       {
@@ -102,22 +104,22 @@ namespace Renderer
       if (e.Key == Key.I)
       {
         _scene.Lights.First().Position.Z -= 10f;
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.K)
       {
         _scene.Lights.First().Position.Z += 10f;
-        UpdateRenderer();
+        UpdateRendererAsync();
       }
       if (e.Key == Key.J)
       {
-        _scene.Lights.First().Position.X += 10f;
-        UpdateRenderer();
+        _scene.Lights.First().Position.X -= 10f;
+        UpdateRendererAsync();
       }
       if (e.Key == Key.L)
       {
-        _scene.Lights.First().Position.X -= 10f;
-        UpdateRenderer();
+        _scene.Lights.First().Position.X += 10f;
+        UpdateRendererAsync();
       }
 
     }
@@ -141,24 +143,30 @@ namespace Renderer
       _pixelData = new byte[_rawStride * _height];
 
       _renderers.Add(new Rasterizer(_scene, this));
-      _renderers.Add(new Raytracer(_scene, this));
-      _renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
-      UpdateRenderer();
+      _renderers.Add(new WireFrameRasterizer(_scene, this));
+      //_renderers.Add(new Raytracer(_scene, this));
+      //_renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
+      UpdateRendererAsync();
     }
 
-    private async void UpdateRenderer()
+    private async void UpdateRendererAsync()
     {
-      RendererName.Text = _renderers[_currentRendererIndex].Name;
-      _timer.Interval = 1;
-      _timer.Elapsed += TimerChanged;
-      _timer.Start();
-      var taskFactory = new TaskFactory();
-      _initialTime = DateTime.Now;
-      await taskFactory.StartNew(() => _renderers[_currentRendererIndex].Render());
-      _bitmap = BitmapSource.Create(_width, _height,
-                96, 96, _pixelFormat, null, _pixelData, _rawStride);
-      Display.Source = _bitmap;
-      _timer.Stop();
+      if (!_isAsync)
+      {
+        _renderers[_currentRendererIndex].Render();
+        UpdateDisplay();
+      }
+      else
+      {
+        _timer.Interval = 1;
+        _timer.Elapsed += TimerChanged;
+        _timer.Start();
+        var taskFactory = new TaskFactory();
+        _initialTime = DateTime.Now;
+        await taskFactory.StartNew(() => _renderers[_currentRendererIndex].Render());
+        UpdateDisplay();
+        _timer.Stop(); 
+      }
     }
 
     private void TimerChanged(object sender, ElapsedEventArgs e)
@@ -168,7 +176,9 @@ namespace Renderer
 
     public void UpdateDisplay()
     {
-
+      _bitmap = BitmapSource.Create(_width, _height,
+                96, 96, _pixelFormat, null, _pixelData, _rawStride);
+      Display.Source = _bitmap;
     }
 
 

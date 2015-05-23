@@ -21,6 +21,7 @@ namespace SceneLib
 
     public void AddVertex(Vertex vertex)
     {
+      vertex.ParentTriangle = this;
       _vertices.Add(vertex);
     }
 
