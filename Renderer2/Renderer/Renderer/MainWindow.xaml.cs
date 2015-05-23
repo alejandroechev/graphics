@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -39,10 +40,10 @@ namespace Renderer
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-      const float deltaCamera = 50;
+      const float deltaCamera = 2f;
       if (e.Key == Key.R)
       {
-        _currentRendererIndex = (_currentRendererIndex + 1)%_renderers.Count;
+        _currentRendererIndex = (_currentRendererIndex + 1) % _renderers.Count;
         UpdateRenderer();
       }
       if (e.Key == Key.W)
@@ -100,14 +101,22 @@ namespace Renderer
       }
       if (e.Key == Key.I)
       {
-        _scene.Camera.NearClip += 100.0f;
-        Console.WriteLine(_scene.Camera.NearClip);
+        _scene.Lights.First().Position.Z -= 10f;
         UpdateRenderer();
       }
       if (e.Key == Key.K)
       {
-        _scene.Camera.NearClip -= 100.0f;
-        Console.WriteLine(_scene.Camera.NearClip);
+        _scene.Lights.First().Position.Z += 10f;
+        UpdateRenderer();
+      }
+      if (e.Key == Key.J)
+      {
+        _scene.Lights.First().Position.X += 10f;
+        UpdateRenderer();
+      }
+      if (e.Key == Key.L)
+      {
+        _scene.Lights.First().Position.X -= 10f;
         UpdateRenderer();
       }
 
@@ -131,6 +140,7 @@ namespace Renderer
       _rawStride = (_width * _pixelFormat.BitsPerPixel + 7) / 8;
       _pixelData = new byte[_rawStride * _height];
 
+      _renderers.Add(new Rasterizer(_scene, this));
       _renderers.Add(new Raytracer(_scene, this));
       _renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
       UpdateRenderer();
@@ -158,7 +168,7 @@ namespace Renderer
 
     public void UpdateDisplay()
     {
-      
+
     }
 
 

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
-  <window width="256" height="256"/>
-  <scene path ="Scenes/teapot.xml"/>
-  <parameters samplesPerPixel="64"/>
+  <window width="512" height="512"/>
+  <scene path ="Scenes/mesh.xml"/>
+  <parameters samplesPerPixel="1"/>
 </config>

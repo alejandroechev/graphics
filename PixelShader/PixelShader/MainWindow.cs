@@ -16,10 +16,10 @@ namespace PixelShader
     public static float FrameRate = 60;
 
 
-    private const string PixelShaderFilePath = @"Shaders\RaytracerTarea2.glsl";
+    private string PixelShaderFilePath = Path.Combine("Shaders","RaytracerTarea2.glsl");
     private string _pixelShaderSource;
     private const string VertexShaderSource = @"
-      #version 130
+      #version 330
       
       precision highp float;
 
@@ -85,6 +85,8 @@ namespace PixelShader
       CreateShaders();
       CreateVBOs();
       CreateVAOs();
+
+      Console.WriteLine(GL.GetString(StringName.Version));
 
     }
 
