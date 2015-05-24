@@ -30,7 +30,7 @@ namespace Renderer
     private DateTime _initialTime;
 
     private readonly TextureSamplerFactory _textureSamplerFactory = new TextureSamplerFactory();
-    private bool _isAsync = false;
+    private bool _isAsync = true;
 
     public MainWindow()
     {
@@ -121,6 +121,11 @@ namespace Renderer
         _scene.Lights.First().Position.X += 10f;
         UpdateRendererAsync();
       }
+      if (e.Key == Key.Z)
+      {
+        RenderingParameters.Instance.UsePerspectiveProjection = !RenderingParameters.Instance.UsePerspectiveProjection;
+        UpdateRendererAsync();
+      }
 
     }
 
@@ -144,8 +149,10 @@ namespace Renderer
 
       _renderers.Add(new Rasterizer(_scene, this));
       _renderers.Add(new WireFrameRasterizer(_scene, this));
+      _renderers.Add(new PointRasterizer(_scene, this));
       //_renderers.Add(new Raytracer(_scene, this));
       //_renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
+      RendererName.Text = _renderers[_currentRendererIndex].Name;
       UpdateRendererAsync();
     }
 

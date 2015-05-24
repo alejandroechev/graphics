@@ -22,7 +22,8 @@ namespace SceneLib
     public int ImageHeight { get; set; }
     public int NumberOfRecursiveRays { get; set; }
     public int NumberOfSamplesPerPixel { get; set; }
-    
+    public bool UsePerspectiveProjection { get; set; }
+
     private RenderingParameters()
     {
       ScenePath = "Scenes/cornellBox.xml";
@@ -30,6 +31,7 @@ namespace SceneLib
       ImageHeight = 256;
       NumberOfRecursiveRays = 3;
       NumberOfSamplesPerPixel = 1;
+      UsePerspectiveProjection = true;
     }
 
     public void Load()

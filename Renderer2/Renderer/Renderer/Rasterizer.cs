@@ -5,17 +5,45 @@ using SceneLib;
 
 namespace Renderer
 {
+  public enum RasterMode
+  {
+    Fill,
+    Wireframe,
+    Points
+  }
+
+  public class PointRasterizer : Rasterizer
+  {
+    public override string Name
+    {
+      get { return "Rasterizer: Point"; }
+    }
+
+    public PointRasterizer(Scene scene, IDisplay display)
+      : base(scene, display)
+    {
+      _rasterMode = RasterMode.Points;
+    }
+  }
+
   public class WireFrameRasterizer : Rasterizer
   {
+    public override string Name
+    {
+      get { return "Rasterizer: Wireframe"; }
+    }
+
     public WireFrameRasterizer(Scene scene, IDisplay display)
       : base(scene, display)
     {
-      _isWireframe = true;
+      _rasterMode = RasterMode.Wireframe;
     }
   }
 
   public class Rasterizer : AbstractRenderer
   {
+    
+
     class VertexOut
     {
       public TriangleBase Triangle { get; set; }
@@ -36,11 +64,11 @@ namespace Renderer
 
     public override string Name
     {
-      get { return "Rasterizer"; }
+      get { return "Rasterizer: Fill"; }
     }
 
     private readonly float[,] _zBuffer;
-    protected bool _isWireframe = false;
+    protected RasterMode _rasterMode = RasterMode.Fill;
 
     public Rasterizer(Scene scene, IDisplay display)
       : base(scene, display)
@@ -63,7 +91,7 @@ namespace Renderer
 
       Console.WriteLine("Preprocess: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
 
-      var projection = PerspectiveProjection();
+      var projection = RenderingParameters.Instance.UsePerspectiveProjection ? PerspectiveProjection() : OrtographicProjection();
       var view = WorldToCamera();
       var worldToClipping = projection * view;
       var viewPort = ViewPort();
@@ -141,9 +169,21 @@ namespace Renderer
 
     private List<Fragment> Rasterize(List<VertexOut> vertices)
     {
-      if (_isWireframe)
+      if (_rasterMode == RasterMode.Wireframe)
         return RasterizeLines(vertices);
+      if (_rasterMode == RasterMode.Points)
+        return RasterizePoints(vertices);
       return RasterizeTriangle(vertices);
+    }
+
+    private List<Fragment> RasterizePoints(List<VertexOut> vertices)
+    {
+      var fragments = new List<Fragment>();
+      foreach (var vertex in vertices)
+      {
+        fragments.Add(new Fragment(){Color = vertex.Color, Position =  new Vector((int)(vertex.ImagePosition.X + 0.5), (int)(vertex.ImagePosition.Y + 0.5)), Z=1});
+      }
+      return fragments;
     }
 
     private List<Fragment> RasterizeLines(List<VertexOut> vertices)
