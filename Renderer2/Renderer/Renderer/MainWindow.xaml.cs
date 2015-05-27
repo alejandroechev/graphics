@@ -121,9 +121,14 @@ namespace Renderer
         _scene.Lights.First().Position.X += 10f;
         UpdateRendererAsync();
       }
-      if (e.Key == Key.Z)
+      if (e.Key == Key.O)
       {
         RenderingParameters.Instance.UsePerspectiveProjection = !RenderingParameters.Instance.UsePerspectiveProjection;
+        UpdateRendererAsync();
+      }
+      if (e.Key == Key.Z)
+      {
+        RenderingParameters.Instance.EnableDepthBuffer = !RenderingParameters.Instance.EnableDepthBuffer;
         UpdateRendererAsync();
       }
 

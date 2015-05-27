@@ -46,7 +46,7 @@ struct Scene {
 const int numberOfSpheres = 8;
 const int numLights = 2;
 const int numberOfMaterials = 5;
-const int maxNumberOfReflections = 3;
+const int maxNumberOfReflections = 2;
 
 Sphere spheres[numberOfSpheres];
 Material materials[numberOfMaterials];
@@ -155,7 +155,7 @@ vec4 rayTrace(Ray ray)
 		{
 			ray.position = p;
 			ray.direction = normalize(reflect(ray.direction, n));
-			frac = mat.reflectivity;
+			frac *= mat.reflectivity;
 		}
 		else
 		{

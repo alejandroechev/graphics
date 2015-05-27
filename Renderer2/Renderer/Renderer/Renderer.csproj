@@ -294,7 +294,7 @@
     <Content Include="Scenes\textures.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scenes\zFighting1.xml">
+    <Content Include="Scenes\zbuffer.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Scenes\zFighting2.xml">

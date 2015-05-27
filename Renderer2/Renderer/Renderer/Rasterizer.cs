@@ -42,14 +42,14 @@ namespace Renderer
 
   public class Rasterizer : AbstractRenderer
   {
-    
+
 
     class VertexOut
     {
       public TriangleBase Triangle { get; set; }
       public Vector Color { get; set; }
       public Vector WorldPosition { get; set; }
-      public Vector PositionHomogeneous { get; set; }
+      public Vector PositionHomogeneus { get; set; }
       public Vector ImagePosition { get; set; }
       public Vector TextureCoordinates { get; set; }
     }
@@ -78,8 +78,6 @@ namespace Renderer
 
     public override void Render()
     {
-      var start = DateTime.Now.Ticks;
-      
       ClearBuffers();
       var meshes = _scene.Objects.Where(o => o is IHaveTriangles).Cast<IHaveTriangles>().ToList();
       var triangles = new List<Triangle>();
@@ -89,14 +87,10 @@ namespace Renderer
       meshes.ForEach(m => m.Triangles.ForEach(t => triangleMatricesDict.Add(t, objectToWorldMatrices[m])));
       meshes.ForEach(m => triangles.AddRange(m.Triangles.Cast<Triangle>().ToList()));
 
-      Console.WriteLine("Preprocess: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
-
       var projection = RenderingParameters.Instance.UsePerspectiveProjection ? PerspectiveProjection() : OrtographicProjection();
       var view = WorldToCamera();
       var worldToClipping = projection * view;
       var viewPort = ViewPort();
-
-      Console.WriteLine("Viewing matrices: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
 
       var originalVertices = new List<Vertex>();
       triangles.ForEach(t => originalVertices.AddRange(t.Vertices));
@@ -104,17 +98,11 @@ namespace Renderer
         originalVertices
           .Select(v => ProcessVertex(v, v.ParentTriangle, viewPort, worldToClipping, triangleMatricesDict[v.ParentTriangle])).ToList();
 
-      Console.WriteLine("Vertex processing: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
-      
       var fragments = new List<Fragment>();
       var triangleGroups = vertices.GroupBy(v => v.Triangle, v => v, (key, g) => g.ToList()).ToList();
       triangleGroups.ForEach(g => fragments.AddRange(Rasterize(g)));
 
-      Console.WriteLine("Rasterization: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
-
       fragments.ForEach(ProcessFragment);
-
-      Console.WriteLine("Frag processing: " + -(start - DateTime.Now.Ticks) / 10000000.0f);
     }
 
     private void ClearBuffers()
@@ -134,7 +122,7 @@ namespace Renderer
       if (fragment.Position.X < 0 || fragment.Position.X > _scene.Width - 1 || fragment.Position.Y < 0 ||
           fragment.Position.Y > _scene.Height - 1)
         return;
-      if (fragment.Z > _zBuffer[(int)fragment.Position.X, (int)fragment.Position.Y])
+      if (fragment.Z > _zBuffer[(int)fragment.Position.X, (int)fragment.Position.Y] || !RenderingParameters.Instance.EnableDepthBuffer)
       {
         _zBuffer[(int)fragment.Position.X, (int)fragment.Position.Y] = fragment.Z;
         _display.SetPixel((int)fragment.Position.X, (int)fragment.Position.Y, fragment.Color.R, fragment.Color.G,
@@ -150,8 +138,8 @@ namespace Renderer
       vertexOut.WorldPosition = objectToWorldTransform * vertex.Position;
       vertex.Normal.W = 0;
       var normal = objectToWorldTransform * vertex.Normal;
-      vertexOut.PositionHomogeneous = worldToClipping * vertexOut.WorldPosition;
-      vertexOut.ImagePosition = viewPort * vertexOut.PositionHomogeneous;
+      vertexOut.PositionHomogeneus = worldToClipping * vertexOut.WorldPosition;
+      vertexOut.ImagePosition = viewPort * vertexOut.PositionHomogeneus;
       vertexOut.ImagePosition /= vertexOut.ImagePosition.W;
 
       vertexOut.Color = vertex.Material.Diffuse * _scene.AmbientLight;
@@ -181,7 +169,7 @@ namespace Renderer
       var fragments = new List<Fragment>();
       foreach (var vertex in vertices)
       {
-        fragments.Add(new Fragment(){Color = vertex.Color, Position =  new Vector((int)(vertex.ImagePosition.X + 0.5), (int)(vertex.ImagePosition.Y + 0.5)), Z=1});
+        fragments.Add(new Fragment() { Color = vertex.Color, Position = new Vector((int)(vertex.ImagePosition.X + 0.5), (int)(vertex.ImagePosition.Y + 0.5)), Z = 1 });
       }
       return fragments;
     }
@@ -282,21 +270,7 @@ namespace Renderer
       return fragments;
     }
 
-    //private Vector PerspectiveCorrect(Triangle triangle, Vector barycentricCoordinates)
-    //{
-    //  var d = triangle.Vertices[1].PositionHomogeneus.W * triangle.Vertices[2].PositionHomogeneus.W +
-    //          triangle.Vertices[2].PositionHomogeneus.W * barycentricCoordinates.Y *
-    //          (triangle.Vertices[0].PositionHomogeneus.W - triangle.Vertices[1].PositionHomogeneus.W) +
-    //          triangle.Vertices[1].PositionHomogeneus.W * barycentricCoordinates.Z *
-    //          (triangle.Vertices[0].PositionHomogeneus.W - triangle.Vertices[2].PositionHomogeneus.W);
-    //  var correctedBarycentricCoordinates = new Vector();
-    //  correctedBarycentricCoordinates.Y = triangle.Vertices[0].PositionHomogeneus.W * triangle.Vertices[2].PositionHomogeneus.W *
-    //                                      barycentricCoordinates.Y / d;
-    //  correctedBarycentricCoordinates.Z = triangle.Vertices[0].PositionHomogeneus.W * triangle.Vertices[1].PositionHomogeneus.W *
-    //                                      barycentricCoordinates.Z / d;
-    //  correctedBarycentricCoordinates.X = 1 - correctedBarycentricCoordinates.Y - correctedBarycentricCoordinates.Z;
-    //  return correctedBarycentricCoordinates;
-    //}
+   
 
     private Matrix ObjectToWorld(IHaveTriangles mesh)
     {
@@ -358,7 +332,23 @@ namespace Renderer
       var alpha = Vector.Dot3(n, na) / Vector.Dot3(n, n);
       var beta = Vector.Dot3(n, nb) / Vector.Dot3(n, n);
       var gamma = Vector.Dot3(n, nc) / Vector.Dot3(n, n);
-      return new Vector(alpha, beta, gamma);
+      return PerspectiveCorrect(vertices, new Vector(alpha, beta, gamma));
+    }
+
+    private Vector PerspectiveCorrect(List<VertexOut> vertices, Vector barycentricCoordinates)
+    {
+      var d = vertices[1].PositionHomogeneus.W * vertices[2].PositionHomogeneus.W +
+              vertices[2].PositionHomogeneus.W * barycentricCoordinates.Y *
+              (vertices[0].PositionHomogeneus.W - vertices[1].PositionHomogeneus.W) +
+              vertices[1].PositionHomogeneus.W * barycentricCoordinates.Z *
+              (vertices[0].PositionHomogeneus.W - vertices[2].PositionHomogeneus.W);
+      var correctedBarycentricCoordinates = new Vector();
+      correctedBarycentricCoordinates.Y = vertices[0].PositionHomogeneus.W * vertices[2].PositionHomogeneus.W *
+                                          barycentricCoordinates.Y / d;
+      correctedBarycentricCoordinates.Z = vertices[0].PositionHomogeneus.W * vertices[1].PositionHomogeneus.W *
+                                          barycentricCoordinates.Z / d;
+      correctedBarycentricCoordinates.X = 1 - correctedBarycentricCoordinates.Y - correctedBarycentricCoordinates.Z;
+      return correctedBarycentricCoordinates;
     }
 
     private Vector InterpolateProperty(List<VertexOut> vertices, Func<VertexOut, Vector> getProperty, Vector barycentricCoordinates)

@@ -23,6 +23,8 @@ namespace SceneLib
     public int NumberOfRecursiveRays { get; set; }
     public int NumberOfSamplesPerPixel { get; set; }
     public bool UsePerspectiveProjection { get; set; }
+    public bool EnableDepthBuffer { get; set; }
+    public bool PerspectiveCorrection { get; set; }
 
     private RenderingParameters()
     {
@@ -32,6 +34,7 @@ namespace SceneLib
       NumberOfRecursiveRays = 3;
       NumberOfSamplesPerPixel = 1;
       UsePerspectiveProjection = true;
+      EnableDepthBuffer = true;
     }
 
     public void Load()

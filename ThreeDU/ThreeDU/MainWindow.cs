@@ -14,27 +14,18 @@ namespace ThreeDU
     public static int WindowWidth = 512;
     public static int WindowHeight = 512;
     public static float FrameRate = 60;
-    
-    private string PixelShaderFilePath = Path.Combine("Shaders","RaytracerTarea2.glsl");
+
+    private string PixelShaderFilePath = Path.Combine("Shaders", "PerVertexLightingFragmentShader.glsl");
     private string _pixelShaderSource;
-    private const string VertexShaderSource = @"
-      #version 330
-      
-      precision highp float;
-
-      in vec3 inPosition;
-      out vec2 pixelCoords;
-      void main(void)
-      {
-        gl_Position = vec4(inPosition, 1);
-        pixelCoords = vec2((inPosition.x + 1.0)/2.0, (inPosition.y + 1.0)/2.0);
-      }";
-
+    private string VertexShaderFilePath = Path.Combine("Shaders", "PerVertexLightingVertexShader.glsl");
+    private string _vertexShaderSource;
+    
     private int _vertexShaderHandle;
     private int _fragmentShaderHandle;
     private int _shaderProgramHandle;
     private int _vaoHandle;
     private int _positionVboHandle;
+    private int _colorVboHandle;
     private int _eboHandle;
 
     private readonly Vector3[] _positionVboData =
@@ -43,6 +34,14 @@ namespace ThreeDU
       new Vector3( 1.0f, -1.0f,  -1.0f),
       new Vector3( 1.0f,  1.0f,  -1.0f),
       new Vector3(-1.0f,  1.0f,  -1.0f)
+    };
+
+    private readonly Vector3[] _colorVboData =
+    {
+      new Vector3( 1.0f, 0.0f,  0.0f),
+      new Vector3( 0.0f, 1.0f,  0.0f),
+      new Vector3( 0.0f, 0.0f,  1.0f),
+      new Vector3( 1.0f, 1.0f,  0.0f)
     };
 
     private readonly int[] _indicesVboData =
@@ -88,6 +87,7 @@ namespace ThreeDU
     private void LoadShaders()
     {
       _pixelShaderSource = File.ReadAllText(PixelShaderFilePath);
+      _vertexShaderSource = File.ReadAllText(VertexShaderFilePath);
     }
 
     protected virtual void CreateShaders()
@@ -96,7 +96,7 @@ namespace ThreeDU
       _vertexShaderHandle = GL.CreateShader(ShaderType.VertexShader);
       _fragmentShaderHandle = GL.CreateShader(ShaderType.FragmentShader);
 
-      GL.ShaderSource(_vertexShaderHandle, VertexShaderSource);
+      GL.ShaderSource(_vertexShaderHandle, _vertexShaderSource);
       GL.ShaderSource(_fragmentShaderHandle, _pixelShaderSource);
 
       GL.CompileShader(_vertexShaderHandle);
@@ -110,11 +110,15 @@ namespace ThreeDU
       GL.AttachShader(_shaderProgramHandle, _vertexShaderHandle);
       GL.AttachShader(_shaderProgramHandle, _fragmentShaderHandle);
 
+      GL.BindAttribLocation(_shaderProgramHandle, 0, "inPosition");
+      GL.BindAttribLocation(_shaderProgramHandle, 1, "inDiffuseColor");
+
+
       GL.LinkProgram(_shaderProgramHandle);
       GL.UseProgram(_shaderProgramHandle);
 
-      _timeHandler = GL.GetUniformLocation(_shaderProgramHandle, "time");
-      _mouseHandler = GL.GetUniformLocation(_shaderProgramHandle, "mouse");
+      //_timeHandler = GL.GetUniformLocation(_shaderProgramHandle, "time");
+      //_mouseHandler = GL.GetUniformLocation(_shaderProgramHandle, "mouse");
     }
 
     private void CreateVBOs()
@@ -124,6 +128,12 @@ namespace ThreeDU
       GL.BufferData(BufferTarget.ArrayBuffer,
           new IntPtr(_positionVboData.Length * Vector3.SizeInBytes),
           _positionVboData, BufferUsageHint.StaticDraw);
+
+      GL.GenBuffers(1, out _colorVboHandle);
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _colorVboHandle);
+      GL.BufferData(BufferTarget.ArrayBuffer,
+          new IntPtr(_colorVboData.Length * Vector3.SizeInBytes),
+          _colorVboData, BufferUsageHint.StaticDraw);
 
       GL.GenBuffers(1, out _eboHandle);
       GL.BindBuffer(BufferTarget.ElementArrayBuffer, _eboHandle);
@@ -140,11 +150,14 @@ namespace ThreeDU
       GL.GenVertexArrays(1, out _vaoHandle);
       GL.BindVertexArray(_vaoHandle);
 
-      GL.EnableVertexAttribArray(0);
       GL.BindBuffer(BufferTarget.ArrayBuffer, _positionVboHandle);
+      GL.EnableVertexAttribArray(0);
       GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, true, Vector3.SizeInBytes, 0);
-      GL.BindAttribLocation(_shaderProgramHandle, 0, "inPosition");
 
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _colorVboHandle);
+      GL.EnableVertexAttribArray(1);
+      GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, true, Vector3.SizeInBytes, 0);
+      
       GL.BindBuffer(BufferTarget.ElementArrayBuffer, _eboHandle);
 
       GL.BindVertexArray(0);
@@ -160,8 +173,8 @@ namespace ThreeDU
       GL.Viewport(0, 0, this.Width, this.Height);
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-      GL.Uniform1(_timeHandler, (float)_time);
-      GL.Uniform2(_mouseHandler, 1, _mouse);
+      //GL.Uniform1(_timeHandler, (float)_time);
+      //GL.Uniform2(_mouseHandler, 1, _mouse);
 
       GL.BindVertexArray(_vaoHandle);
       GL.DrawElements(BeginMode.Triangles, _indicesVboData.Length,
