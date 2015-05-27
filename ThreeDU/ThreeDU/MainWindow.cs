@@ -68,7 +68,7 @@ namespace ThreeDU
     private void MouseMoved(object sender, MouseMoveEventArgs e)
     {
       _mouse[0] = (float)e.X / this.Width;
-      _mouse[1] = (WindowHeight - (float)e.Y)/this.Height;
+      _mouse[1] = (this.Height - (float)e.Y) / this.Height;
     }
 
     protected override void OnLoad(EventArgs e)

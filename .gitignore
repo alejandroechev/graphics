@@ -27,7 +27,7 @@
 *.lastbuildstate
 *.tlog
 *.pdb
-*.dll
+
 *.sqlce
 *.playlist
 bmp.output
