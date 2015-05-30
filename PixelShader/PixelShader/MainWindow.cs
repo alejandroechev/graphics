@@ -11,12 +11,12 @@ namespace PixelShader
 {
   class MainWindow : GameWindow
   {
-    public static int SceneWidth = 512;
-    public static int SceneHeight = 512;
+    public static int SceneWidth = 1024;
+    public static int SceneHeight = 1024;
     public static float FrameRate = 60;
 
 
-    private string PixelShaderFilePath = Path.Combine("Shaders","RaytracerTarea2.glsl");
+    private string PixelShaderFilePath = Path.Combine("Shaders","Mandelbrot.glsl");
     private string _pixelShaderSource;
     private const string VertexShaderSource = @"
       #version 330

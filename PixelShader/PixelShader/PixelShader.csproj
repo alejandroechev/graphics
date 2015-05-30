@@ -149,6 +149,9 @@
     <Content Include="Shaders\RaytracerTarea2 - Base.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Mandelbrot.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Shaders\Actividad.glsl">
