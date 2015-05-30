@@ -11,8 +11,8 @@ namespace PixelShader
 {
   class MainWindow : GameWindow
   {
-    public static int SceneWidth = 1024;
-    public static int SceneHeight = 1024;
+    public static int SceneWidth = 512;
+    public static int SceneHeight = 512;
     public static float FrameRate = 60;
 
 
@@ -70,8 +70,8 @@ namespace PixelShader
 
     private void MouseMoved(object sender, MouseMoveEventArgs e)
     {
-      _mouse[0] = (float)e.X / SceneWidth;
-      _mouse[1] = (SceneHeight - (float)e.Y)/SceneHeight;
+      _mouse[0] = (float)e.X / this.Width;
+      _mouse[1] = (this.Height - (float)e.Y)/this.Height;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -162,7 +162,7 @@ namespace PixelShader
 
     protected override void OnRenderFrame(FrameEventArgs e)
     {
-      GL.Viewport(0, 0, SceneWidth, SceneHeight);
+      GL.Viewport(0, 0, this.Width, this.Height);
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       GL.Uniform1(_timeHandler, (float)_time);
