@@ -32,9 +32,12 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\ThreeDU\Libraries\OpenTK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoundingBoxTest.cs" />
+    <Compile Include="math\BoundingBoxTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -45,5 +48,8 @@
       <Project>{3567CAD0-DE95-4BA8-98DE-750B75DCB45A}</Project>
       <Name>ThreeAPI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="math\" />
   </ItemGroup>
 </Project>
