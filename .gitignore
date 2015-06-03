@@ -75,4 +75,5 @@ packages/
 # visual studio database projects
 *.dbmdl
 
-
+# Mac Files
+.DS_Store
