@@ -33,10 +33,16 @@ namespace Renderer
 
     public override void OnKeyPress(KeyPressEventArgs e)
     {
-      if (e.KeyChar == 'o')
-        _showWireframe = !_showWireframe;
+      if (e.KeyChar == 'c')
+        _enableClipping = !_enableClipping;
       if (e.KeyChar == 'p')
-        _perPixelShading = !_perPixelShading;
+        _correctPerspective = !_correctPerspective;
+      if (e.KeyChar == 'y')
+        _scene.NextCamera();
+      //if (e.KeyChar == 'o')
+      //  _showWireframe = !_showWireframe;
+      //if (e.KeyChar == 'p')
+      //  _perPixelShading = !_perPixelShading;
       if (e.KeyChar == 'n')
         _scene.NextCamera();
       if (e.KeyChar == 'm')
@@ -67,18 +73,18 @@ namespace Renderer
       _scene.Camera.Position = _scene.Lights.First().Position;
 
       var triangles = Viewing(true);
-      Rasterization(triangles, false);
+      TriangleProcessing(triangles, false);
       SaveShadowMap();
 
       _scene.NextCamera();
     }
 
-    private void TriangleProcessing(IEnumerable<Triangle> triangles)
+    private void TriangleProcessing(IEnumerable<Triangle> triangles, bool updateFrameBuffer = true)
     {
       if (_enableClipping)
         triangles = ClippingAndCulling(triangles);
 
-      Rasterization(triangles);
+      Rasterization(triangles, updateFrameBuffer);
     }
 
     private IEnumerable<Triangle> VertexProcessing()
@@ -179,8 +185,8 @@ namespace Renderer
               outputNormal.Normalize3();
               outputVertex.Normal = outputNormal;
 
-              var v = (_scene.Camera.Position - outputVertex.WorldPosition).Normalize3();
-              var r = v*-1 + 2*(Vector.Dot3(v, outputVertex.Normal))*outputVertex.Normal;
+              var d = (outputVertex.WorldPosition - _scene.Camera.Position).Normalize3();
+              var r = d - 2*(Vector.Dot3(d, outputVertex.Normal))*outputVertex.Normal;
               r.Normalize3();
               outputVertex.ReflectionDirection = r;
               if (_enableShadowMapping && !generatingShadowMap)
@@ -380,7 +386,7 @@ namespace Renderer
       {
         var shadowX = (int)(shadowP.X + 0.5);
         var shadowY = (int)(shadowP.Y + 0.5);
-        var bias = _enableShadowMappingBias ? 0.1 : 0.0;
+        var bias = _enableShadowMappingBias ? 0.05 : 0.0;
         var inShadow = shadowX >= 0 && shadowX < _scene.Width && shadowY >= 0 && shadowY < _scene.Height &&
                        shadowP.Z + bias < _shadowMap[shadowX, shadowY];
         if (inShadow)
@@ -397,7 +403,7 @@ namespace Renderer
       }
       if (material.HasEnvironmentMap && _enableReflectionMapping)
       {
-        var reflectionDirection = triangle.InterpolateProperty(v => v.ReflectionDirection, bar);
+        var reflectionDirection = triangle.InterpolateProperty(v => v.Normal, bar).Normalize3();
         var mapColor = material.SampleEnvironmentMap(reflectionDirection);
         color = material.ReflectivityAttenuation*mapColor + color;
       }

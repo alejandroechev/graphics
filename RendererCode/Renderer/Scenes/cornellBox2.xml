@@ -84,7 +84,7 @@
 
     <material name="Boat">
       <diffuseTexture filename="Images/barco.jpg"/>
-      <diffuse red="0.639" green="0.6" blue="0.762"/>
+      <diffuse red="1" green="1" blue="1"/>
       <specular red="1" green="1" blue="1" shininess="100.0"/>
     </material>
   </material_list>
@@ -112,7 +112,7 @@
 
 
       <vertex index="2" material="Boat">
-        <position x="0.0" y="0.0" z="559.2"/>
+        <position x="0.0" y="0.0" z="1559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
       </vertex>
@@ -124,22 +124,22 @@
       <position x="0.0" y="0.0" z="0.0"/>
 
 
-      <vertex index="0" material="White">
+      <vertex index="0" material="Boat">
         <position x="552.8" y="0.0" z="0.0"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
 
 
-      <vertex index="1" material="White">
-        <position x="549.6" y="0.0" z="559.2"/>
+      <vertex index="1" material="Boat">
+        <position x="549.6" y="0.0" z="1559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="0.0" v="1.0"/>
       </vertex>
 
 
-      <vertex index="2" material="White">
-        <position x="0.0" y="0.0" z="559.2"/>
+      <vertex index="2" material="Boat">
+        <position x="0.0" y="0.0" z="1559.2"/>
         <normal x="0.0" y="1.0" z="0.0"/>
         <texture u="1.0" v="1.0"/>
       </vertex>
@@ -199,7 +199,7 @@
       </vertex>
     </triangle>
 
-    <triangle name="BackWall1">
+    <!--<triangle name="BackWall1">
       <scale x="1.0" y="1.0" z="1.0"/>
       <rotation x="0.0" y="0.0" z="0.0"/>
       <position x="0.0" y="0.0" z="0.0"/>
@@ -251,7 +251,7 @@
         <normal x="0.0" y="0.0" z="-1.0"/>
         <texture u="0.0" v="0.0"/>
       </vertex>
-    </triangle>
+    </triangle>-->
 
     <triangle name="RightWall1">
       <scale x="1.0" y="1.0" z="1.0"/>
@@ -354,20 +354,7 @@
       </vertex>
     </triangle>
 
-    <sphere name="Sphere1" material="Blue" radius="120.0">
-      <scale x="1.0" y="1.0" z="1.0"/>
-      <rotation x="0.0" y="0.0" z="0.0"/>
-      <position x="0.0" y="0.0" z="0.0"/>
-      <velocity x="0.0" y="0.0" z="0.0"/>
-      <center x="370.0" y="150.0" z="370.0"/>
-    </sphere>
-
-    <sphere name="Sphere2" material="Yellow" radius="100.0">
-      <scale x="1.0" y="1.0" z="1.0"/>
-      <rotation x="0.0" y="0.0" z="0.0"/>
-      <position x="0.0" y="0.0" z="0.0"/>
-      <center x="130.0" y="110.0" z="130.0"/>
-    </sphere>
+   
 
   </object_list>
 

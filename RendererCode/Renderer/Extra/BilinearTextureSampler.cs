@@ -68,6 +68,7 @@ namespace Renderer
 
     private CubeMapFaces GetFace(Vector direction)
     {
+
       if (Math.Abs(direction.X) >= Math.Abs(direction.Y) && Math.Abs(direction.X) >= Math.Abs(direction.Z))
       {
         if (direction.X > 0)
@@ -89,7 +90,7 @@ namespace Renderer
         else
           return CubeMapFaces.NegativeZ;
       }
-      throw new ApplicationException("should be here");
+      throw new ApplicationException("shouldnt be here");
     }
 
     private Vector GetTextureCoordinates(CubeMapFaces face, Vector direction)

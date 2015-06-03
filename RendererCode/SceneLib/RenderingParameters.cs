@@ -47,7 +47,7 @@ namespace SceneLib
       EnableParallelism = true;
       MultiSampleTexture = false;
 
-      EnableShadows = false;
+      EnableShadows = true;
       EnableReflections = true;
       EnableRefractions = true;
       NumberOfRecursiveRays = 10;
