@@ -38,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="math\BoundingBoxTest.cs" />
+    <Compile Include="math\PlaneTest.cs" />
+    <Compile Include="math\RayTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
