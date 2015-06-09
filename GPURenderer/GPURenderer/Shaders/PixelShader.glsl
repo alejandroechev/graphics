@@ -17,7 +17,7 @@
   En este ejemplo el pixel shader "no hace nada", lo que se conoce como "pass through" osea deja pasar el color recibido tal cual. Para hacer
   esto se defien un atributo de salida denominado outFragColor que obtiene el valor de shadedColor
 */
-#version 330
+#version 130
 
 precision highp float;
 

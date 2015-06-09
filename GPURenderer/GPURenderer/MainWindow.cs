@@ -100,7 +100,7 @@ namespace GPURenderer
     //La API de OpenGL no provee estos helpers
     private void ViewingSetup(IHaveTriangles mesh)
     {
-      var scaleMatrix = Matrix4.CreateScale(mesh.Scale.ToVector3());
+      var scaleMatrix = Matrix4.Scale(mesh.Scale.ToVector3());
       var rotationMatrixX = Matrix4.CreateRotationX((float)(mesh.Rotation.X.ToRadians()));
       var rotationMatrixY = Matrix4.CreateRotationY((float)(mesh.Rotation.Y.ToRadians()));
       var rotationMatrixZ = Matrix4.CreateRotationZ((float)(mesh.Rotation.Z.ToRadians()));

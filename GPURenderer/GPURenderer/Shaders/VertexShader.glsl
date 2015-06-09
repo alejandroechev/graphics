@@ -19,7 +19,7 @@ en el shader, pero perfectamente podrían pasarse como uniforms.
 
 
 */
-#version 330
+#version 130
 
 precision highp float;
 
