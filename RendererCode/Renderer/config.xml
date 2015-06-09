@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
   <window width="512" height="512" frameRate="30"/>
-  <scene path ="Scenes/shadows.xml"/>
+  <scene path ="Scenes/cornellBox2.xml"/>
   <optimizations parallelism="true"/>
   <rendering samplesPerPixel="1" multiSampleTexture="true" minimumTime="0" maximumTime="0" focalDistance="1100" lensSize="0" />
 

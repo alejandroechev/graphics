@@ -32,7 +32,7 @@ namespace Renderer.Base
       _transformationRenderingManager = new CPUTextureRenderOpenGlManager(_scene, simpleSampler, new TransformationRenderer(_scene));
       _simulationRenderingManager = new CPUTextureRenderOpenGlManager(_scene, simpleSampler, new SimulationRenderer(_scene, simpleSampler));
       _interactiveSimulationRenderingManager = new GPUTextureRenderOpenGlManager(_scene);
-      _manager = _simulationRenderingManager;
+      _manager = _transformationRenderingManager;
 
       Mouse.Move += MouseMoved;
     }

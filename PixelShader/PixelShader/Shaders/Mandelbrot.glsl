@@ -42,6 +42,6 @@ void main(void)
   }
 
   float interpolator = (number_of_iterations - finalIt)/number_of_iterations;
-  vec3 color = palette(interpolator, vec3(0.5), vec3(0.5), vec3(1), vec3(0,0.1,0.2)); //mix(colorOut, colorIn, interpolator);
+  vec3 color = palette(interpolator, vec3(0.5, 0.5, 0.5), vec3(0.5, 0.5, 0.5), vec3(1.0, 1.0, 1.0), vec3(0.0, 0.1, 0.2)); //mix(colorOut, colorIn, interpolator);
   pixelColor = vec4(color, 1);
 }

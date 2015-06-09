@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Scene Description in XML -->
+<scene>
+
+  <!-- Background Color and Ambient Light Property -->
+  <background>
+    <color red="1.0" green="1.0" blue="1.0"/>
+    <ambientLight red="0.2" green="0.2" blue="0.2"/>
+  </background>
+
+  <!-- Cameras Description -->
+  <camera_list>
+    <camera fieldOfView="45" nearClip="0.001" farClip="300.0">
+      <position x="10.0" y="10.0" z="10.0"/>
+      <target x="0.0" y="0.0" z="0.0"/>
+      <up x="0.0" y="0.0" z="1.0"/>
+    </camera>
+  </camera_list>
+
+  <!-- Light Sources Collection -->
+  <light_list>
+    <!-- Light Description, Color & Position -->
+    <light>
+      <color red="0.8" green="0.7" blue="0.6"/>
+      <position x="0.0" y="0.0" z="20"/>
+    </light>
+  </light_list>
+
+  <!-- Material Type Collection -->
+  <material_list>
+
+    <material name="Blue">
+      <diffuse red="0.156" green="0.126" blue="0.507"/>
+      <specular red="1" green="1" blue="1" shininess="100.0"/>
+    </material>
+
+    <material name="Green">
+      <diffuse red="0.156" green="0.426" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Red">
+      <diffuse red="0.639" green="0.06" blue="0.062"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+    <material name="Yellow">
+      <texture filename=""/>
+      <diffuse red="0.656" green="0.626" blue="0.107"/>
+      <specular red="0.0" green="0.0" blue="0.0" shininess="1.0"/>
+    </material>
+
+
+  </material_list>
+
+  <!-- List of Scene Objects -->
+  <object_list>
+
+    <mesh name="Mesh1" material="Red" path="Meshes/dragon.obj">
+      <scale x="5" y="5" z="5"/>
+      <rotation x="0.0" y="0.0" z="120.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+    </mesh>
+
+  </object_list>
+
+  <!-- End of Scene -->
+</scene>

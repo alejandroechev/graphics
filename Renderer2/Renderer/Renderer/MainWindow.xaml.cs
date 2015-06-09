@@ -155,8 +155,8 @@ namespace Renderer
       _renderers.Add(new Rasterizer(_scene, this));
       _renderers.Add(new WireFrameRasterizer(_scene, this));
       _renderers.Add(new PointRasterizer(_scene, this));
-      //_renderers.Add(new Raytracer(_scene, this));
-      //_renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
+      _renderers.Add(new Raytracer(_scene, this));
+      _renderers.Add(new DistributionRaytracer(_scene, this, RenderingParameters.Instance.NumberOfSamplesPerPixel));
       RendererName.Text = _renderers[_currentRendererIndex].Name;
       UpdateRendererAsync();
     }

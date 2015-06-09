@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Scene Description in XML -->
+<scene>
+
+  <!-- Background Color and Ambient Light Property -->
+  <background>
+    <color red="0.0" green="0.0" blue="0.0"/>
+    <ambientLight red="0.2" green="0.2" blue="0.2"/>
+  </background>
+
+  <!-- Cameras Description -->
+  <camera_list>
+    <camera fieldOfView="39.31" nearClip="0.0001" farClip="10.0">
+      <position x="0.0" y="0.2" z="0.5"/>
+      <target x="0.0" y="0.1" z="0.0"/>
+      <up x="0.0" y="1.0" z="0.0"/>
+    </camera>
+  </camera_list>
+
+  <!-- Light Sources Collection -->
+  <light_list>
+    <!-- Light Description, Color & Position -->
+    <light>
+      <color red="0.8" green="0.7" blue="0.6"/>
+      <position x="0.0" y="4.5" z="10.0"/>
+    </light>
+
+    <light>
+      <color red="0.4" green="0.4" blue="0.4"/>
+      <position x="10.0" y="4.5" z="4.0"/>
+    </light>
+
+    <light>
+      <color red="0.4" green="0.4" blue="0.4"/>
+      <position x="-10.0" y="14.5" z="0.0"/>
+    </light>
+  </light_list>
+
+  <!-- Material Type Collection -->
+  <material_list>
+
+    <material name="Grid">
+      <diffuseTexture filename="Images/grid.jpg"/>
+      <diffuse red="0.639" green="0.6" blue="0.762"/>
+      <specular red="0" green="0" blue="0" shininess="100.0"/>
+    </material>
+
+    <material name="Yellow">
+      <diffuse red="0.656" green="0.626" blue="0.107"/>
+      <specular red="1.0" green="1.0" blue="1.0" shininess="100.0"/>
+    </material>
+
+    <material name="Magenta">
+      <diffuse red="0.656" green="0.0626" blue="0.707"/>
+      <specular red="1.0" green="1.0" blue="1.0" shininess="100.0"/>
+    </material>
+
+  </material_list>
+
+  <!-- List of Scene Objects -->
+  <object_list>
+
+   
+
+
+    <mesh name="Bunny" material="Yellow" path="Meshes/bunny.obj">
+      <scale x="1.0" y="1.0" z="1.0"/>
+      <rotation x="0.0" y="0.0" z="0.0"/>
+      <position x="0.0" y="0.0" z="0.0"/>
+    </mesh>
+
+  </object_list>
+
+  <!-- End of Scene -->
+</scene>
