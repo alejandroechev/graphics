@@ -40,6 +40,7 @@
     <Compile Include="math\BoundingBoxTest.cs" />
     <Compile Include="math\PlaneTest.cs" />
     <Compile Include="math\RayTest.cs" />
+    <Compile Include="math\BoundingSphereTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

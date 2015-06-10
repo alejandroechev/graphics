@@ -14,11 +14,14 @@ namespace ThreeAPI
     }
 
     public static bool Contains(BoundingSphere sphere, Vector3 vector){
-      return false;
+      float d = (sphere.Center - vector).Length;
+
+      return (d <= sphere.Radius);
     }
 
     public static bool Intersects(BoundingSphere sphere1, BoundingSphere sphere2){
-      return false;
+      float d = (sphere1.Center - sphere2.Center).Length;
+      return (d <= sphere1.Radius + sphere2.Radius);
     }
     public static bool Intersects(BoundingSphere sphere, BoundingBox box){
       return BoundingBox.Intersects(box, sphere);
