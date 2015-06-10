@@ -44,7 +44,7 @@ namespace GPURenderer
 
     //Matrices de viewing, que serán pasadas como uniform a la GPU
     private Matrix4 _projectionMatrix, _viewMatrix, _modelToWorld;
-    
+
     public MainWindow(int width, int height)
       : base(width, height,
         new OpenTK.Graphics.GraphicsMode(), "GPU Renderer", GameWindowFlags.Default,
@@ -55,7 +55,7 @@ namespace GPURenderer
       var renderObjectFactory = new RenderObjectFactory(meshLoader);
       _scene = new Scene(width, height, renderObjectFactory);
       _scene.Load(RenderingParameters.Instance.ScenePath);
-      
+
       Mouse.Move += OnMouseMoved;
     }
 
@@ -93,17 +93,17 @@ namespace GPURenderer
       _normalVboData = normals.ToArray();
       _indicesVboData = Enumerable.Range(0, mesh.Triangles.Count * 3).ToArray();
 
-      ViewingSetup(mesh);
     }
 
     //Las matrices de viewing son implementadas ocupando clases helpers de la libería OpenTK (el wrapper de C# de OpenGL que estamos ocupando)
     //La API de OpenGL no provee estos helpers
-    private void ViewingSetup(IHaveTriangles mesh)
+    private void ViewingSetup()
     {
+      var mesh = _scene.Objects.FirstOrDefault(o => o is IHaveTriangles) as IHaveTriangles;
       var scaleMatrix = Matrix4.Scale(mesh.Scale.ToVector3());
       var rotationMatrixX = Matrix4.CreateRotationX((float)(mesh.Rotation.X.ToRadians()));
       var rotationMatrixY = Matrix4.CreateRotationY((float)(mesh.Rotation.Y.ToRadians()));
-      var rotationMatrixZ = Matrix4.CreateRotationZ((float)(mesh.Rotation.Z.ToRadians()));
+      var rotationMatrixZ = Matrix4.CreateRotationZ((float)((mesh.Rotation.Z + rotationZ).ToRadians()));
       var translationMatrix = Matrix4.CreateTranslation(mesh.Position.ToVector3());
       _modelToWorld = Matrix4.Mult(translationMatrix, Matrix4.Mult(rotationMatrixX, Matrix4.Mult(rotationMatrixY, Matrix4.Mult(rotationMatrixZ, scaleMatrix))));
 
@@ -161,12 +161,8 @@ namespace GPURenderer
 
       //Finalmente tenemos que pasar todos los unfiforms que ocuparemos, para lo cual tenemos que obtener la ubicación de estos en el shader
       //y luego copiar la información
-      var projectionMatrixLocation = GL.GetUniformLocation(_shaderProgramHandle, "projectionMatrix");
-      GL.UniformMatrix4(projectionMatrixLocation, false, ref _projectionMatrix);
-      var viewMatrixLocation = GL.GetUniformLocation(_shaderProgramHandle, "viewMatrix");
-      GL.UniformMatrix4(viewMatrixLocation, false, ref _viewMatrix);
-      var modelToWorldLocation = GL.GetUniformLocation(_shaderProgramHandle, "modelToWorld");
-      GL.UniformMatrix4(modelToWorldLocation, false, ref _modelToWorld);
+     
+      
       var cameraPositionLocation = GL.GetUniformLocation(_shaderProgramHandle, "cameraPosition");
       GL.Uniform3(cameraPositionLocation, _scene.Camera.Position.ToVector3());
     }
@@ -218,18 +214,40 @@ namespace GPURenderer
       GL.BindVertexArray(0);
     }
 
+    private bool rotate = false;
+    private float rotationZ = 0;
     //Este metodo se llama cada vez que la CPU quiere un nuevo rendering 
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       GL.Viewport(0, 0, _scene.Width, _scene.Height); //Indicamos el tamaño y ubicación de la imagen, para la transformacion de Viewport que realizara la GPU
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); //Limpiamos la imagen y el depth buffer (z-buffer)
+     
+      var currentMaterialLocation = GL.GetUniformLocation(_shaderProgramHandle, "currentMaterialIndex");
+      GL.Uniform1(currentMaterialLocation, currentMaterialIndex);
 
+      var useToonShadingLocation = GL.GetUniformLocation(_shaderProgramHandle, "useToonShading");
+      GL.Uniform1(useToonShadingLocation, useToonShading);
+      
+      ViewingSetup();
+      if (rotate)
+        rotationZ = rotationZ + 1;
+
+      var modelToWorldLocation = GL.GetUniformLocation(_shaderProgramHandle, "modelToWorld");
+      GL.UniformMatrix4(modelToWorldLocation, false, ref _modelToWorld);
+
+      var projectionMatrixLocation = GL.GetUniformLocation(_shaderProgramHandle, "projectionMatrix");
+      GL.UniformMatrix4(projectionMatrixLocation, false, ref _projectionMatrix);
+      var viewMatrixLocation = GL.GetUniformLocation(_shaderProgramHandle, "viewMatrix");
+      GL.UniformMatrix4(viewMatrixLocation, false, ref _viewMatrix);
+
+
+      
       GL.BindVertexArray(_vaoHandle); //Indicamos cual es nuestro vertex array
       GL.DrawElements(BeginMode.Triangles, _indicesVboData.Length, DrawElementsType.UnsignedInt, IntPtr.Zero); //Indicamos a la GPU que queremos dibujar los triangulos que configuramos
 
       //La llamada a DrawElements le indica a la GPU que realice su rendering, pero retorna de inmediato (no espera terminar)
       //Luego de solicitar que se dibuje el proximo frame, la CPU le pide a la GPU que actualice el display con el ultimo frame completado
-      SwapBuffers(); 
+      SwapBuffers();
     }
 
 
@@ -237,10 +255,17 @@ namespace GPURenderer
     {
 
     }
-    
+
+    private int currentMaterialIndex = 0;
+    private int useToonShading = -1;
     protected override void OnKeyPress(KeyPressEventArgs e)
     {
-     
+      if(e.KeyChar == 'm')
+        currentMaterialIndex = (currentMaterialIndex + 1) % 4;
+      else if (e.KeyChar == 't')
+        useToonShading *= -1;
+      else if (e.KeyChar == 'r')
+        rotate = !rotate;
     }
 
     [STAThread]
