@@ -103,7 +103,7 @@ namespace GPURenderer
       var scaleMatrix = Matrix4.Scale(mesh.Scale.ToVector3());
       var rotationMatrixX = Matrix4.CreateRotationX((float)(mesh.Rotation.X.ToRadians()));
       var rotationMatrixY = Matrix4.CreateRotationY((float)(mesh.Rotation.Y.ToRadians()));
-      var rotationMatrixZ = Matrix4.CreateRotationZ((float)(rotationZ.ToRadians()));
+      var rotationMatrixZ = Matrix4.CreateRotationZ((float)((mesh.Rotation.Z + rotationZ).ToRadians()));
       var translationMatrix = Matrix4.CreateTranslation(mesh.Position.ToVector3());
       _modelToWorld = Matrix4.Mult(translationMatrix, Matrix4.Mult(rotationMatrixX, Matrix4.Mult(rotationMatrixY, Matrix4.Mult(rotationMatrixZ, scaleMatrix))));
 
@@ -214,13 +214,14 @@ namespace GPURenderer
       GL.BindVertexArray(0);
     }
 
+    private bool rotate = false;
     private float rotationZ = 0;
     //Este metodo se llama cada vez que la CPU quiere un nuevo rendering 
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       GL.Viewport(0, 0, _scene.Width, _scene.Height); //Indicamos el tamaño y ubicación de la imagen, para la transformacion de Viewport que realizara la GPU
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); //Limpiamos la imagen y el depth buffer (z-buffer)
-
+     
       var currentMaterialLocation = GL.GetUniformLocation(_shaderProgramHandle, "currentMaterialIndex");
       GL.Uniform1(currentMaterialLocation, currentMaterialIndex);
 
@@ -228,7 +229,8 @@ namespace GPURenderer
       GL.Uniform1(useToonShadingLocation, useToonShading);
       
       ViewingSetup();
-      rotationZ = rotationZ + 1;
+      if (rotate)
+        rotationZ = rotationZ + 1;
 
       var modelToWorldLocation = GL.GetUniformLocation(_shaderProgramHandle, "modelToWorld");
       GL.UniformMatrix4(modelToWorldLocation, false, ref _modelToWorld);
@@ -262,6 +264,8 @@ namespace GPURenderer
         currentMaterialIndex = (currentMaterialIndex + 1) % 4;
       else if (e.KeyChar == 't')
         useToonShading *= -1;
+      else if (e.KeyChar == 'r')
+        rotate = !rotate;
     }
 
     [STAThread]
