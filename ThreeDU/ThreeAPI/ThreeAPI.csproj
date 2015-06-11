@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -32,6 +32,8 @@
     <Reference Include="OpenTK">
       <HintPath>..\ThreeDU\Libraries\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -39,9 +41,40 @@
     <Compile Include="math\BoundingSphere.cs" />
     <Compile Include="math\Plane.cs" />
     <Compile Include="math\Ray.cs" />
+    <Compile Include="scene\BaseSceneNode.cs" />
+    <Compile Include="scene\DataNodeFactory.cs" />
+    <Compile Include="scene\Extensions.cs" />
+    <Compile Include="scene\ICurve.cs" />
+    <Compile Include="scene\IDataNode.cs" />
+    <Compile Include="scene\IMesh.cs" />
+    <Compile Include="scene\IMeshLoader.cs" />
+    <Compile Include="scene\IPoints.cs" />
+    <Compile Include="scene\IPolygon.cs" />
+    <Compile Include="scene\IScene.cs" />
+    <Compile Include="scene\ISceneNode.cs" />
+    <Compile Include="scene\ISceneNodeFactory.cs" />
+    <Compile Include="scene\IShape.cs" />
+    <Compile Include="scene\IShapeFactory.cs" />
+    <Compile Include="scene\ISurface.cs" />
+    <Compile Include="scene\IVertex.cs" />
+    <Compile Include="scene\IDataNodeFactory.cs" />
+    <Compile Include="scene\IVertexFactory.cs" />
+    <Compile Include="scene\IXmlDataNodeReader.cs" />
+    <Compile Include="scene\Mesh.cs" />
+    <Compile Include="scene\ObjMeshLoader.cs" />
+    <Compile Include="scene\RotationNode.cs" />
+    <Compile Include="scene\ScaleNode.cs" />
+    <Compile Include="scene\SceneNodeFactory.cs" />
+    <Compile Include="scene\ShapeFactory.cs" />
+    <Compile Include="scene\ShapeNode.cs" />
+    <Compile Include="scene\TransformNode.cs" />
+    <Compile Include="scene\TranslationNode.cs" />
+    <Compile Include="scene\Triangle.cs" />
+    <Compile Include="scene\Vertex.cs" />
+    <Compile Include="scene\VertexFactory.cs" />
+    <Compile Include="scene\XMLDataNode.cs" />
+    <Compile Include="scene\XMLDataNodeReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="math\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
